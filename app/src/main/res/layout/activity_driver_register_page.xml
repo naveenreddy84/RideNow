@@ -1,0 +1,92 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Register Here "
+        android:textSize="30sp"
+        android:textColor="#00C6EE"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="50dp" />
+
+
+    <EditText
+        android:id="@+id/registerEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Please enter email"
+        android:inputType="textEmailAddress"
+        android:layout_marginBottom="20dp" />
+
+
+    <EditText
+        android:id="@+id/registerPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Please enter password"
+        android:inputType="textPassword"
+        android:layout_marginBottom="20dp" />
+
+
+    <EditText
+        android:id="@+id/confirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:id="@+id/updl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Driving License"
+        android:textSize="20sp"
+        android:textColor="#00C6EE"
+        android:paddingBottom="16dp"
+    android:layout_marginStart="10dp"
+        android:layout_gravity="center_horizontal" />
+
+
+    <ImageView
+        android:id="@+id/licenseImageView"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:layout_gravity="right"
+        android:scaleType="centerCrop"
+        android:src="@drawable/car"
+    android:contentDescription="Driving license photo" />
+
+
+    <Button
+        android:id="@+id/uploadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Photo"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp" />
+    <Button
+        android:id="@+id/registerBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        />
+
+
+
+
+
+
+
+
+
+</LinearLayout>
