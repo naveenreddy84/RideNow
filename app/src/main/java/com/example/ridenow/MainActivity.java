@@ -39,17 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            signOut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mAuth.signOut();
-                    finish();
 
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
 
     }
 }
