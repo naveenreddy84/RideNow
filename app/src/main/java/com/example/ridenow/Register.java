@@ -8,6 +8,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -23,7 +24,9 @@ import java.util.regex.Pattern;
 
 public class Register extends AppCompatActivity {
     EditText registerEmail, registerPassword, confirmPassword;
-    Button registerBtn, loginLink;
+    Button registerBtn;
+
+    TextView registerLink;
     FirebaseAuth mAuth;
 
     @Override
@@ -36,7 +39,7 @@ public class Register extends AppCompatActivity {
         registerPassword = findViewById(R.id.registerPassword);
         confirmPassword = findViewById(R.id.confirmPassword);
         registerBtn = findViewById(R.id.registerBtn);
-        loginLink = findViewById(R.id.loginLink);
+        registerLink = findViewById(R.id.registerLink);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -47,7 +50,7 @@ public class Register extends AppCompatActivity {
             }
         });
 
-        loginLink.setOnClickListener(new View.OnClickListener() {
+        registerLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Register.this, LoginActivity.class);

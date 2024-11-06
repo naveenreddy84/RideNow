@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/backgroundimage"
+
     android:padding="16dp">
 
 
@@ -25,6 +27,9 @@
         android:layout_height="wrap_content"
         android:hint="Please enter email"
         android:inputType="textEmailAddress"
+        android:textColorHint="@color/white"
+        android:drawableStart="@drawable/email"
+
         android:layout_marginBottom="20dp" />
 
 
@@ -34,6 +39,7 @@
         android:layout_height="wrap_content"
         android:hint="Please enter password"
         android:inputType="textPassword"
+        android:textColorHint="@color/white"
         android:layout_marginBottom="20dp" />
 
 
@@ -43,6 +49,7 @@
         android:layout_height="wrap_content"
         android:hint="Confirm Password"
         android:inputType="textPassword"
+        android:textColorHint="@color/white"
         android:layout_marginBottom="20dp" />
 
     <TextView
@@ -50,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Upload Driving License"
-        android:textSize="20sp"
+
         android:textColor="#00C6EE"
         android:paddingBottom="16dp"
     android:layout_marginStart="10dp"
@@ -61,9 +68,9 @@
         android:id="@+id/licenseImageView"
         android:layout_width="150dp"
         android:layout_height="200dp"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
         android:scaleType="centerCrop"
-        android:src="@drawable/car"
+        android:src="@drawable/backgroundimage"
     android:contentDescription="Driving license photo" />
 
 
@@ -76,6 +83,7 @@
         android:layout_marginTop="16dp" />
     <Button
         android:id="@+id/registerBtn"
+        android:background="@color/Blue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register"
