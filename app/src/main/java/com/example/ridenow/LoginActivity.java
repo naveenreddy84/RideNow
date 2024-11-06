@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -20,7 +21,9 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginActivity extends AppCompatActivity {
 
     EditText loginEmail, loginPassword;
-    Button registerLink, loginBtn;
+    Button  loginBtn;
+
+    TextView registerLink;
     FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

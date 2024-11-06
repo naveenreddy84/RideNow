@@ -8,16 +8,16 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="20dp"
-    android:background="@color/white"
+    android:background="@drawable/backgroundimage"
     >
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login Page"
+        android:text="Login"
         android:textSize="30dp"
-        android:textColor="#00C6EE"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:padding="16dp"
         android:gravity="top"
@@ -28,7 +28,10 @@
         android:id="@+id/loginEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:hint="Please enter email"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
       android:layout_marginBottom="20dp"
 
         />
@@ -37,22 +40,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Please enter password"
+        android:textColorHint="@color/white"
         android:inputType="textPassword"
+        android:textColor="@color/white"
         android:layout_marginBottom="20dp"
+
         />
     <Button
         android:id="@+id/loginBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login"
+        android:backgroundTint="#03A9F4"
+        android:layout_marginBottom="10dp"
         android:textStyle="bold"
         />
-    <Button
+
+    <TextView
         android:id="@+id/registerLink"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Don't have an account? Register"
-        android:textColor="@color/white"
+        android:textColor="#03A9F4"
+        android:linksClickable="true"
+        android:autoLink="web"
+        android:layout_gravity="end"
         />
+
+
 
 </LinearLayout>

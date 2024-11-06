@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             EdgeToEdge.enable(this);
             setContentView(R.layout.activity_main);
 
-            signOut = findViewById(R.id.signOut);
+
 
             mAuth = FirebaseAuth.getInstance();
 
