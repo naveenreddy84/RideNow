@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
+import Authentication.LoginActivity;
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override

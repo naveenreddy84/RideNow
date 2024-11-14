@@ -1,16 +1,14 @@
-package com.example.ridenow;
+package Authentication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Contacts;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.ridenow.R;
 
 public class DecidingPage extends AppCompatActivity {
 
@@ -32,7 +30,7 @@ public class DecidingPage extends AppCompatActivity {
         CustomerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Intent intent = new Intent(DecidingPage.this,Register.class);
+               Intent intent = new Intent(DecidingPage.this, Register.class);
                startActivity(intent);
                 finish();
 
@@ -42,7 +40,7 @@ public class DecidingPage extends AppCompatActivity {
         DriverBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DecidingPage.this,DriverRegisterPage.class);
+                Intent intent = new Intent(DecidingPage.this, DriverRegisterPage.class);
                 startActivity(intent);
                 finish();
 

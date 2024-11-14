@@ -10,7 +10,7 @@
     android:orientation="vertical"
     android:backgroundTintMode="screen"
     android:background="@drawable/backgroundimage"
-    tools:context=".DecidingPage">
+    tools:context="Authentication.DecidingPage">
 
 
 

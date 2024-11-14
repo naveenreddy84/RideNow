@@ -1,4 +1,4 @@
-package com.example.ridenow;
+package Authentication;
 
 
 import android.content.Intent;
@@ -13,14 +13,13 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.example.ridenow.MainActivity;
+import com.example.ridenow.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.regex.Pattern;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.auth.User;
 
 public class Register extends AppCompatActivity {
     EditText registerEmail, registerPassword, confirmPassword;
@@ -28,6 +27,7 @@ public class Register extends AppCompatActivity {
 
     TextView registerLink;
     FirebaseAuth mAuth;
+ FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,7 @@ public class Register extends AppCompatActivity {
         registerLink = findViewById(R.id.registerLink);
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,9 +94,14 @@ public class Register extends AppCompatActivity {
         mAuth.createUserWithEmailAndPassword(email, pswd).addOnCompleteListener(this, task ->{
 
             if(task.isSuccessful()){
+
+             Customers customer = new Customers(email,cPassword,pswd);
+             FirebaseFirestore db = FirebaseFirestore.getInstance();
+             db.collection("Customers").add(customer);
+
                 Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(Register.this, MainActivity.class);
+                Intent intent = new Intent(Register.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }

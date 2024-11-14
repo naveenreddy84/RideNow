@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,9 +22,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        Button signOut, deleteAccount;
+
 
         FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
 
             mAuth = FirebaseAuth.getInstance();
+            db = FirebaseFirestore.getInstance();
 
-            FirebaseUser currentUser = mAuth.getCurrentUser();
+
 
 
 

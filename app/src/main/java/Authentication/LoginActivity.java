@@ -1,4 +1,4 @@
-package com.example.ridenow;
+package Authentication;
 
 
 import android.content.Intent;
@@ -12,10 +12,9 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.example.ridenow.MainActivity;
+import com.example.ridenow.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
