@@ -38,6 +38,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.firebase:firebase-bom:32.0.0")
 
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -47,6 +48,7 @@ dependencies {
     implementation(libs.annotation)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

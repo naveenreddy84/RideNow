@@ -25,9 +25,11 @@
         android:id="@+id/registerEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
         android:hint="Please enter email"
         android:inputType="textEmailAddress"
-        android:textColorHint="@color/white"
+
         android:drawableStart="@drawable/email"
 
         android:layout_marginBottom="20dp" />
@@ -37,9 +39,11 @@
         android:id="@+id/registerPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
         android:hint="Please enter password"
         android:inputType="textPassword"
-        android:textColorHint="@color/white"
+
         android:layout_marginBottom="20dp" />
 
 
@@ -47,9 +51,11 @@
         android:id="@+id/confirmPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
         android:hint="Confirm Password"
         android:inputType="textPassword"
-        android:textColorHint="@color/white"
+
         android:layout_marginBottom="20dp" />
 
     <TextView
@@ -80,15 +86,17 @@
         android:layout_height="wrap_content"
         android:text="Upload Photo"
         android:layout_gravity="center_horizontal"
+        android:backgroundTint="#03A9F4"
         android:layout_marginTop="16dp" />
     <Button
         android:id="@+id/registerBtn"
-        android:background="@color/Blue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register"
-        />
+        android:backgroundTint="#03A9F4"
+        android:layout_marginBottom="10dp"
 
+        />
 
 
 
