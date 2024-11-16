@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         FirebaseAuth mAuth;
-    private FirebaseFirestore db;
+    FirebaseFirestore db;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
