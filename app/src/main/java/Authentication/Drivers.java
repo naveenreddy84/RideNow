@@ -8,14 +8,14 @@ public class Drivers {
         private String email;
         private String cPassword;
         private String pswd;
-        private Uri imageUri;
 
 
-        public Drivers(String email, String cPassword, String pswd, Uri imageUri) {
+
+        public Drivers(String email, String cPassword, String pswd) {
             this.email = email;
             this.cPassword = cPassword;
             this.pswd = pswd;
-            this.imageUri = imageUri;
+
         }
 
     public String getcPassword() {
@@ -42,13 +42,9 @@ public class Drivers {
         this.email = email;
     }
 
-    public Uri getImageUri() {
-            return imageUri;
-        }
 
-        public void setImageUri(Uri imageUri) {
-            this.imageUri = imageUri;
-        }
+
+
     }
 
 
