@@ -7,7 +7,6 @@ import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ridenow.R;
-import com.google.firebase.auth.FirebaseUser;
 
 public class DecidingPage extends AppCompatActivity {
 
@@ -29,7 +28,7 @@ public class DecidingPage extends AppCompatActivity {
         CustomerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DecidingPage.this, Register.class);
+                Intent intent = new Intent(DecidingPage.this, CustomerRegister.class);
                 startActivity(intent);
                 finish();
             }

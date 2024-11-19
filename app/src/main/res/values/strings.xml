@@ -19,4 +19,15 @@
     <string name="please_enter_password">Please enter password</string>
     <string name="please_enter_email">Please enter email</string>
     <string name="register_here">Register Here</string>
+    <string name="search_for_rides">Search For Rides</string>
+    <string name="search">search</string>
+    <string name="login">Login</string>
+    <string name="from_destination">From Destination</string>
+    <string name="from_address">from_Address</string>
+    <string-array name="locations_array">
+        <item> Selected Location</item>
+        <item>Toronto</item>
+        <item>Montreal</item>
+        <item>Ottawa</item>
+    </string-array>
 </resources>

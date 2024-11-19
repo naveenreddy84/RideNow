@@ -39,7 +39,7 @@
             android:name="Authentication.LoginActivity"
             android:exported="true" />
         <activity
-            android:name="Authentication.Register"
+            android:name="Authentication.CustomerRegister"
             android:exported="true" />
     </application>
 

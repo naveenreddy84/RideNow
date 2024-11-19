@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loginUser();
+               loginUser();
             }
         });
 
@@ -80,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             else{
                 Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show();
+                Log.d("LoginActivity", "Customer not found");
 
             }
         });
@@ -87,8 +88,8 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void checkUserRole(String email) {
 
-        db.collection("customers")
-                .whereEqualTo("email",email)
+        db.collection("Customers")
+                .whereEqualTo("email", email)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -98,23 +99,22 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("LoginActivity", "Customer not found, checking for drivers");
 
 
-                        db.collection("drivers")
-                                .whereEqualTo("email",email)
+                        db.collection("Drivers")
+                                .whereEqualTo("email", email)
                                 .get()
                                 .addOnCompleteListener(Drivertask -> {
                                     if (Drivertask.isSuccessful() && !Drivertask.getResult().isEmpty()) {
                                         navigateToDriverPage();
 
                                     } else {
-
                                         Toast.makeText(this, "No user found with this email", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                     }
                 });
-    }
 
-    private void navigateToCustomerPage() {
+    }
+        private void navigateToCustomerPage() {
 
         Intent intent = new Intent(LoginActivity.this, CustomerHomeScreen.class);
         startActivity(intent);
