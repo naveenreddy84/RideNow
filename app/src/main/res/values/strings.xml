@@ -10,4 +10,24 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="car">car image</string>
+    <string name="don_t_have_an_account_register">Don\'t have an account? Register</string>
+    <string name="register">Register</string>
+    <string name="upload_photo">Upload Photo</string>
+    <string name="driving_license_photo">Driving license photo</string>
+    <string name="upload_driving_license">Upload Driving License</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="please_enter_password">Please enter password</string>
+    <string name="please_enter_email">Please enter email</string>
+    <string name="register_here">Register Here</string>
+    <string name="search_for_rides">Search For Rides</string>
+    <string name="search">search</string>
+    <string name="login">Login</string>
+    <string name="from_destination">From Destination</string>
+    <string name="from_address">from_Address</string>
+    <string-array name="locations_array">
+        <item> Selected Location</item>
+        <item>Toronto</item>
+        <item>Montreal</item>
+        <item>Ottawa</item>
+    </string-array>
 </resources>

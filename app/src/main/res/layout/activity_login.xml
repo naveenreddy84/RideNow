@@ -15,8 +15,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:textSize="30dp"
+        android:text="@string/login"
+        android:textSize="30sp"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:padding="16dp"
@@ -28,7 +28,7 @@
         android:id="@+id/loginEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:inputType="textEmailAddress"
         android:hint="Please enter email"
         android:textColorHint="@color/white"
         android:textColor="@color/white"
