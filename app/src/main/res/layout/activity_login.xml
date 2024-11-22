@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:gravity="center"
     android:padding="20dp"
-    android:background="@drawable/backgroundimage"
-    >
+    android:background="@drawable/backgroundimage">
 
 
     <TextView
@@ -27,7 +23,7 @@
     <EditText
         android:id="@+id/loginEmail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:inputType="textEmailAddress"
         android:hint="Please enter email"
         android:textColorHint="@color/white"
@@ -38,7 +34,7 @@
     <EditText
         android:id="@+id/loginPassword"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:hint="Please enter password"
         android:textColorHint="@color/white"
         android:inputType="textPassword"

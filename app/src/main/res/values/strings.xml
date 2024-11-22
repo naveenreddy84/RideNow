@@ -25,7 +25,7 @@
     <string name="from_destination">From Destination</string>
     <string name="from_address">from_Address</string>
     <string-array name="locations_array">
-        <item> Selected Location</item>
+        <item> Select Location</item>
         <item>Toronto</item>
         <item>Montreal</item>
         <item>Ottawa</item>

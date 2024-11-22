@@ -14,7 +14,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import HomePages.CustomerHomeScreen;
 import HomePages.DriverHomePage;
-import com.example.ridenow.MainActivity;
+
 import com.example.ridenow.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
