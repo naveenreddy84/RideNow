@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+
+ xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:gravity="center"
+    android:background="@drawable/backgroundimage"
+    tools:context="HomePages.availablerides">
+
+   <LinearLayout
+
+       android:id="@+id/Box"
+       android:layout_width="320dp"
+       android:layout_height="500dp"
+       android:orientation="vertical"
+       android:padding="16dp"
+       android:background="@color/white"
+       android:layout_margin="12dp"
+       android:elevation="40dp"
+       android:clipToPadding="false"
+       android:gravity="center"
+      >
+
+       <TextView
+           android:id="@+id/title"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Avaliable Rides"
+          android:textColor="@color/black"
+           android:textStyle="bold"
+           android:textSize="40dp"
+           android:layout_marginBottom="360dp"
+           />
+
+
+       </LinearLayout>
+
+
+</LinearLayout>

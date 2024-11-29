@@ -8,9 +8,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/backgroundimage"
-    android:padding="20dp"
+
     android:gravity="center"
-    tools:context="HomePages.DriverHomePage">
+    tools:context="HomePages.CustomerHomeScreen">
 
 <LinearLayout
 
@@ -81,7 +81,7 @@
         />
 
     <Button
-        android:id="@+id/registerBtn"
+        android:id="@+id/searchBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Search"
@@ -89,6 +89,8 @@
         android:layout_marginBottom="10dp"
 
         />
+
+
 
 
 

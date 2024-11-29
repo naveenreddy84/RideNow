@@ -24,6 +24,7 @@
     <string name="login">Login</string>
     <string name="from_destination">From Destination</string>
     <string name="from_address">from_Address</string>
+    <string name="avaliable_rides">avaliable rides</string>
     <string-array name="locations_array">
         <item> Select Location</item>
         <item>Toronto</item>

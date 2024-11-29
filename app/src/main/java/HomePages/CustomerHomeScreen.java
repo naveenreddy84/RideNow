@@ -1,9 +1,11 @@
 package HomePages;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,6 +26,8 @@ public class CustomerHomeScreen extends AppCompatActivity {
 
     TextView title, fromAddresstitle, ToAddresstitle;
     Spinner snipperfromlocations, snipperTolocations;
+
+    Button searchBtn;
 
 
     FirebaseAuth mAuth;
@@ -48,6 +52,7 @@ public class CustomerHomeScreen extends AppCompatActivity {
         ToAddresstitle = findViewById(R.id.ToAddresstitle);
         snipperfromlocations = findViewById(R.id.snipperfromlocations);
         snipperTolocations = findViewById(R.id.snipperTolocations);
+        searchBtn = findViewById(R.id.searchBtn);
 
 
         locationsArray = getResources().getStringArray(R.array.locations_array);
@@ -115,6 +120,29 @@ public class CustomerHomeScreen extends AppCompatActivity {
                 Toast.makeText(CustomerHomeScreen.this, "No location selected", Toast.LENGTH_SHORT).show();
             }
         });
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String fromLocation = snipperfromlocations.getSelectedItem().toString();
+                String toLocation = snipperTolocations.getSelectedItem().toString();
+
+                if (!fromLocation.equals("Select Location") && !toLocation.equals("Select Location")) {
+                    Intent intent = new Intent(CustomerHomeScreen.this, availablerides.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(CustomerHomeScreen.this, "Please select both From and To locations", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
+
+
+
+
     }
 }
 
