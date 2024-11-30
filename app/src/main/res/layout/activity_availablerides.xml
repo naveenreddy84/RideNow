@@ -12,7 +12,7 @@
     android:orientation="vertical"
     android:padding="20dp"
     android:gravity="center"
-    android:background="@drawable/backgroundimage"
+    android:background="@drawable/car"
     tools:context="HomePages.availablerides">
 
    <LinearLayout

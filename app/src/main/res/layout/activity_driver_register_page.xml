@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/backgroundimage"
+    android:background="@drawable/car"
 
     android:padding="16dp">
 
@@ -30,7 +30,7 @@
         android:hint="@string/please_enter_email"
         android:inputType="textEmailAddress"
 
-        android:drawableStart="@drawable/email"
+
         android:padding="16dp"
 
         android:layout_marginBottom="20dp" />
