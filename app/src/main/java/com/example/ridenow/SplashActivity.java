@@ -1,40 +1,54 @@
 package com.example.ridenow;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
+
+
+
+
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.view.View;
+import android.os.Handler;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.ridenow.R;
 
 import Authentication.LoginActivity;
 
+
 public class SplashActivity extends AppCompatActivity {
+
+    TextView title;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        View carImageView = findViewById(R.id.carImageView);
+        title = findViewById(R.id.title);
 
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(carImageView, "translationX", 0f, 800f);
-        animator.setDuration(3000); // Duration in milliseconds
-        animator.start();
 
 
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.splash_sound);
+        mediaPlayer.start();
+
+
+        new Handler().postDelayed(() -> {
+            mediaPlayer.release();
+            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }, 3000);
     }
 }
+
+
+
 

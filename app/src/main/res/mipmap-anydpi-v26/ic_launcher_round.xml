@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background android:drawable="@drawable/Car" />
-    <foreground android:drawable="@drawable/Car" />
-    <monochrome android:drawable="@drawable/Car" />
+
 </adaptive-icon>

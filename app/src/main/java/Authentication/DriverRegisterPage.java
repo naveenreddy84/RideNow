@@ -110,17 +110,30 @@ public class DriverRegisterPage extends AppCompatActivity {
 
                 if (task.isSuccessful()) {
 
-                    Drivers Driver = new Drivers(email, cPassword, pswd);
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    db.collection("Drivers").add(Driver);
+                    FirebaseUser user = mAuth.getCurrentUser();
 
-                    Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                    if(user != null){
+                        user.sendEmailVerification().addOnCompleteListener( emailTask -> {
+                            if(emailTask.isSuccessful()){
+                                Toast.makeText(this, "Registration Successful.please verify your email", Toast.LENGTH_SHORT).show();
+                                Drivers Driver = new Drivers(email, cPassword, pswd);
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                db.collection("Drivers").add(Driver);
 
-                    Intent intent = new Intent(DriverRegisterPage.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                                Intent intent = new Intent(DriverRegisterPage.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }else {
+                                Toast.makeText(this,"failed to verify Email",Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        });
+                    }
+
+
                 } else {
-                    Toast.makeText(this, "Registration Failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Registration Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
 

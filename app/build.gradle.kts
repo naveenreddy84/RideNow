@@ -40,6 +40,8 @@ android {
 dependencies {
     implementation("com.google.firebase:firebase-bom:32.0.0")
     implementation ("com.google.android.material:material:1.9.0")
+    implementation ("com.google.firebase:firebase-auth:21.6.0")
+
 
 
     implementation(libs.appcompat)

@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ridenow.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class CustomerRegister extends AppCompatActivity {
@@ -25,6 +26,8 @@ public class CustomerRegister extends AppCompatActivity {
     TextView registerLink;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,8 @@ public class CustomerRegister extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
+
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,21 +93,37 @@ public class CustomerRegister extends AppCompatActivity {
             return;
         }
 
+
+
         mAuth.createUserWithEmailAndPassword(email, pswd).addOnCompleteListener(this, task -> {
 
             if (task.isSuccessful()) {
 
-                Customers customer = new Customers(email, cPassword, pswd);
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-               db.collection("Customers").add(customer);
+                FirebaseUser user = mAuth.getCurrentUser();
 
-                Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                if(user != null){
+                    user.sendEmailVerification().addOnCompleteListener(emailTask ->{
+                                if(emailTask.isSuccessful()){
+                                    Toast.makeText(this, "Registration Successful.please verify your Email", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(CustomerRegister.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                                    Customers customer = new Customers(email, cPassword, pswd);
+                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                    db.collection("Customers").add(customer);
+
+
+                                    Intent intent = new Intent(CustomerRegister.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }else {
+                                    Toast.makeText(this, "failed to send verification mail", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                }
+
+
             } else {
-                Toast.makeText(this, "Registration Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Registration Failed"+ task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 
             }
 

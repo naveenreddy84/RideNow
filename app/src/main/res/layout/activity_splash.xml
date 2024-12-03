@@ -6,19 +6,23 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="horizontal"
-    tools:context=".SplashActivity">
+  android:background="@drawable/car"
+    android:orientation="vertical"
+    tools:context=".SplashScreenActivity">
 
 
-    <ImageView
+    <TextView
 
-        android:id="@+id/carImageView"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:contentDescription="@string/car"
-        android:src="@drawable/car"
+        android:text="@string/ridenow"
+        android:textSize="50sp"
+        android:textColorHint="@color/Blue"
+        android:textStyle="bold"
+     android:layout_gravity="center"
+        android:textAppearance="@color/Blue"
 
         />
 

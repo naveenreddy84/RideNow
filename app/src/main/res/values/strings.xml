@@ -27,6 +27,7 @@
     <string name="avaliable_rides">avaliable rides</string>
     <string name="welcome_back">Welcome Back</string>
     <string name="create_a_ride">Create A ride</string>
+    <string name="ridenow">RideNow</string>
     <string-array name="locations_array">
         <item> Select Location</item>
         <item>Toronto</item>

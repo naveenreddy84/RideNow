@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText loginEmail, loginPassword;
     Button  loginBtn;
-    TextView registerLink;
+    TextView registerLink,forgotpswd;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
 
@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         registerLink = findViewById(R.id.registerLink);
         loginEmail = findViewById(R.id.loginEmail);
         loginPassword = findViewById(R.id.loginPassword);
+        forgotpswd = findViewById(R.id.forgotpswd);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
@@ -79,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
             else{
-                Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Login Failed.check your credentials", Toast.LENGTH_SHORT).show();
                 Log.d("LoginActivity", "Customer not found");
 
             }
