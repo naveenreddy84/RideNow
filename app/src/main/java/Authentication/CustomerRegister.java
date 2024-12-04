@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class CustomerRegister extends AppCompatActivity {
-    EditText registerEmail, registerPassword, confirmPassword;
+    EditText registerEmail, registerPassword, confirmPassword,Customerusername;
     Button registerBtn;
 
     TextView registerLink;
@@ -34,7 +34,7 @@ public class CustomerRegister extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
-
+        Customerusername = findViewById(R.id.Customerusername);
         registerEmail = findViewById(R.id.registerEmail);
         registerPassword = findViewById(R.id.registerPassword);
         confirmPassword = findViewById(R.id.confirmPassword);
@@ -69,8 +69,9 @@ public class CustomerRegister extends AppCompatActivity {
         String email = registerEmail.getText().toString().trim();
         String cPassword = confirmPassword.getText().toString().trim();
         String pswd = registerPassword.getText().toString().trim();
+        String uname = Customerusername.getText().toString().trim();
 
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pswd) || TextUtils.isEmpty(cPassword)) {
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pswd) || TextUtils.isEmpty(cPassword) || TextUtils.isEmpty(uname)) {
             Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -95,6 +96,7 @@ public class CustomerRegister extends AppCompatActivity {
 
 
 
+
         mAuth.createUserWithEmailAndPassword(email, pswd).addOnCompleteListener(this, task -> {
 
             if (task.isSuccessful()) {
@@ -106,7 +108,7 @@ public class CustomerRegister extends AppCompatActivity {
                                 if(emailTask.isSuccessful()){
                                     Toast.makeText(this, "Registration Successful.please verify your Email", Toast.LENGTH_SHORT).show();
 
-                                    Customers customer = new Customers(email, cPassword, pswd);
+                                    Customers customer = new Customers(email, cPassword, pswd,uname);
                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                                     db.collection("Customers").add(customer);
 

@@ -7,6 +7,8 @@ private String email;
 
      private String pswd;
 
+     private  String uname;
+
 
     public String getcPassword() {
         return cPassword;
@@ -32,10 +34,19 @@ private String email;
         this.pswd = pswd;
     }
 
-    public Customers(String email, String cPassword, String pswd) {
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
+
+    public String getUname() {
+        return uname;
+    }
+
+    public Customers(String email, String cPassword, String pswd, String uname) {
         this.email = email;
         this.cPassword = cPassword;
         this.pswd = pswd;
+        this.uname = uname;
 
 
 

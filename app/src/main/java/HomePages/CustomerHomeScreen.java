@@ -47,12 +47,18 @@ public class CustomerHomeScreen extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
 
+
         title = findViewById(R.id.title);
         fromAddresstitle = findViewById(R.id.fromAddresstitle);
         ToAddresstitle = findViewById(R.id.ToAddresstitle);
         snipperfromlocations = findViewById(R.id.snipperfromlocations);
         snipperTolocations = findViewById(R.id.snipperTolocations);
         searchBtn = findViewById(R.id.searchBtn);
+
+
+
+
+
 
 
         locationsArray = getResources().getStringArray(R.array.locations_array);
@@ -136,6 +142,8 @@ public class CustomerHomeScreen extends AppCompatActivity {
                 }
             }
         });
+
+
 
 
 

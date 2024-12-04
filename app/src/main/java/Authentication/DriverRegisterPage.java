@@ -31,7 +31,7 @@ public class DriverRegisterPage extends AppCompatActivity {
     TextView registerLink;
 
     Button registerBtn;
-    EditText registerEmail, registerPassword, confirmPassword;
+    EditText registerEmail, registerPassword, confirmPassword,driverusername;
 
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -50,7 +50,7 @@ public class DriverRegisterPage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-
+        driverusername = findViewById(R.id.driverusername);
         registerBtn = findViewById(R.id.registerBtn);
         registerEmail = findViewById(R.id.registerEmail);
         registerPassword = findViewById(R.id.registerPassword);
@@ -80,6 +80,7 @@ public class DriverRegisterPage extends AppCompatActivity {
             String email = registerEmail.getText().toString().trim();
             String cPassword = confirmPassword.getText().toString().trim();
             String pswd = registerPassword.getText().toString().trim();
+            String  uname  =  driverusername.getText().toString().trim();
 
 
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pswd) || TextUtils.isEmpty(cPassword)) {
@@ -116,7 +117,7 @@ public class DriverRegisterPage extends AppCompatActivity {
                         user.sendEmailVerification().addOnCompleteListener( emailTask -> {
                             if(emailTask.isSuccessful()){
                                 Toast.makeText(this, "Registration Successful.please verify your email", Toast.LENGTH_SHORT).show();
-                                Drivers Driver = new Drivers(email, cPassword, pswd);
+                                Drivers Driver = new Drivers(email, cPassword, pswd,uname);
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                                 db.collection("Drivers").add(Driver);
 

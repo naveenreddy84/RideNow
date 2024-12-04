@@ -9,14 +9,22 @@ public class Drivers {
         private String cPassword;
         private String pswd;
 
+        private String driverusername;
 
 
-        public Drivers(String email, String cPassword, String pswd) {
+
+        public Drivers(String email, String cPassword, String pswd, String driverusername) {
             this.email = email;
             this.cPassword = cPassword;
             this.pswd = pswd;
+            this.driverusername = driverusername;
 
         }
+
+
+    public void setDriverusername(String driverusername) {
+        this.driverusername = driverusername;
+    }
 
     public String getcPassword() {
         return cPassword;
@@ -42,9 +50,9 @@ public class Drivers {
         this.email = email;
     }
 
-
-
-
+    public String getDriverusername() {
+        return driverusername;
     }
+}
 
 
