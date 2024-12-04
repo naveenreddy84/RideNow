@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText loginEmail, loginPassword;
     Button  loginBtn;
-    TextView registerLink,forgotpswd;
+    TextView registerLink,forgotPasswordBtn;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
 
@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         registerLink = findViewById(R.id.registerLink);
         loginEmail = findViewById(R.id.loginEmail);
         loginPassword = findViewById(R.id.loginPassword);
-        forgotpswd = findViewById(R.id.forgotpswd);
+        forgotPasswordBtn = findViewById(R.id.forgotPasswordBtn);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
@@ -48,6 +48,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                loginUser();
+            }
+        });
+
+     forgotPasswordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,ForgotPassword.class);
+                startActivity(intent);
             }
         });
 
@@ -67,8 +75,14 @@ public class LoginActivity extends AppCompatActivity {
         String email = loginEmail.getText().toString().trim();
         String pswd = loginPassword.getText().toString().trim();
 
-        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(pswd)){
-            Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
+        if(TextUtils.isEmpty(email)){
+            loginEmail.setError("Email is required");
+             loginEmail.requestFocus();
+             return;
+        }
+        if(TextUtils.isEmpty(pswd)){
+            loginPassword.setError(" password is Required");
+            loginPassword.requestFocus();
             return;
         }
 
@@ -81,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             else{
                 Toast.makeText(this, "Login Failed.check your credentials", Toast.LENGTH_SHORT).show();
-                Log.d("LoginActivity", "Customer not found");
+
 
             }
         });
@@ -115,6 +129,10 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
     }
+
+
+
+
         private void navigateToCustomerPage() {
 
         Intent intent = new Intent(LoginActivity.this, CustomerHomeScreen.class);
@@ -128,4 +146,5 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
 }
