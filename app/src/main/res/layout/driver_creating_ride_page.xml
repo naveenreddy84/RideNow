@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_gravity="center"
+    android:background="@drawable/car"
 
 
     >
@@ -33,7 +34,12 @@
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
             android:spinnerMode="dropdown"
-            android:textColorHint="@color/white"/>
+            android:background="@color/white"
+            android:textColorHint="@color/white"
+            android:entries="@array/locations_array"
+            />
+
+
 
         <TextView
             android:id="@+id/driverToAddresstitle"
@@ -48,44 +54,43 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
-            android:spinnerMode="dropdown"/>
+            android:background="@color/white"
+            android:spinnerMode="dropdown"
+            android:entries="@array/locations_array"
+            />
 
         <DatePicker
             android:id="@+id/datepicker"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:id="@+id/nextBtn"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Next"
-            android:backgroundTint="#03A9F4"
-            android:layout_marginTop="16dp"/>
+            android:background="@color/white"
+            android:layout_marginBottom="20dp"/>
+
+        <EditText
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Please enter price in $"
+            android:backgroundTint="@color/white"
+            android:textColorHint="@color/black"
+            android:textColor="@color/black"
+            android:background="@color/white"
+            />
+        <Button
+            android:id="@+id/uploadBtn"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:text="@string/upload_the_ride"
+            android:backgroundTint="@color/Blue"
+            android:layout_gravity="center"
+
+            />
 
     </LinearLayout>
 
 
 
 
-    <FrameLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/bottom_navigation" />
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:layout_alignParentBottom="true"
-            app:menu="@menu/bottom_nav_menu"
-            app:labelVisibilityMode="labeled"
-            app:itemIconTint="@color/Blue"
-            app:itemTextColor="@color/Blue"
-
-            />
 
 
     </LinearLayout>

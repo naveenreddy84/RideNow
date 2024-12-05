@@ -2,6 +2,7 @@ package HomePages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -39,36 +40,49 @@ public class DriverHomePage extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_driver_home_page);
 
+        mAuth = FirebaseAuth.getInstance();
+
+        db = FirebaseFirestore.getInstance();
+
+        user = mAuth.getCurrentUser();
 
         welcomemsg = findViewById(R.id.welcomemsg);
         create_a_rideBtn = findViewById(R.id.create_a_rideBtn);
 
-       mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        user = mAuth.getCurrentUser();
 
-       db = FirebaseFirestore.getInstance();
+        welcomemsg = findViewById(R.id.welcomemsg);
+        create_a_rideBtn = findViewById(R.id.create_a_rideBtn);
 
-       user = mAuth.getCurrentUser();
+        if (user != null) {
 
+            String driverId = user.getUid();
+            db.collection("Drivers").document(driverId)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
 
-       if(user != null){
+                            String username = documentSnapshot.getString("driverusername");
+                            if (username != null && !username.isEmpty()) {
 
-           db.collection("Drivers").document(user.getUid()).get()
-                   .addOnSuccessListener(documentSnapshot -> {
-                       if(documentSnapshot.exists()){
+                                welcomemsg.setText("Welcome, " + username + "!");
+                            } else {
+                                welcomemsg.setText("Welcome!");
+                            }
+                        } else {
+                            welcomemsg.setText("Welcome!");
+                        }
+                    })
+                    .addOnFailureListener(e -> {
 
-                           String uname = documentSnapshot.getString("driverusername");
-                           System.out.println("user name is " + uname);
-
-                           welcomemsg.setText( "welcome " + uname);
-
-                       }else{
-                           welcomemsg.setText("welcome ,driver");
-                       }
-                   }).addOnFailureListener(e -> System.out.println("Error: " + e.getMessage()));
-
-       }else{
-           System.out.println("No user is signed in.");
-       }
+                        welcomemsg.setText("Welcome!");
+                        Log.e("FirestoreError", "Error fetching driver data", e);
+                    });
+        } else {
+            welcomemsg.setText("Welcome!");
+        }
 
 
 
@@ -79,9 +93,21 @@ public class DriverHomePage extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(DriverHomePage.this,CreatingRidePage.class);
                 startActivity(intent);
-                finish();
+
             }
         });
+
+
+
+
+
+
+
+
+
+
+
+
 
         }
 

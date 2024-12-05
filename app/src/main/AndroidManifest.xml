@@ -16,6 +16,8 @@
         <activity
             android:name="HomePages.availablerides"
             android:exported="true" />
+        <activity android:name="HomePages.CreatingRidePage"
+            android:exported="true"/>
         <activity android:name="Authentication.ForgotPassword"
             android:exported="true"/>
         <activity
