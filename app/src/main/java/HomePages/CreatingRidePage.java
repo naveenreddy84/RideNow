@@ -1,5 +1,6 @@
 package HomePages;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ridenow.ConfirmRidePage;
 import com.example.ridenow.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -125,6 +127,20 @@ public class CreatingRidePage extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 Toast.makeText(CreatingRidePage.this, "No location selected", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        uploadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(driversnipperfromlocations.equals("Select Location") || driversnipperTolocations.equals("Select Location") || price != null){
+                    Toast.makeText(CreatingRidePage.this,"please fill all the fields",Toast.LENGTH_SHORT).show();
+                }else{
+                    Intent intent = new Intent(CreatingRidePage.this, ConfirmRidePage.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 

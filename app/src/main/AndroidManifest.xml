@@ -14,12 +14,17 @@
         android:theme="@style/Theme.RideNow"
         tools:targetApi="31">
         <activity
+            android:name=".ConfirmRidePage"
+            android:exported="false" />
+        <activity
             android:name="HomePages.availablerides"
             android:exported="true" />
-        <activity android:name="HomePages.CreatingRidePage"
-            android:exported="true"/>
-        <activity android:name="Authentication.ForgotPassword"
-            android:exported="true"/>
+        <activity
+            android:name="HomePages.CreatingRidePage"
+            android:exported="true" />
+        <activity
+            android:name="Authentication.ForgotPassword"
+            android:exported="true" />
         <activity
             android:name="HomePages.CustomerHomeScreen"
             android:exported="true" />
