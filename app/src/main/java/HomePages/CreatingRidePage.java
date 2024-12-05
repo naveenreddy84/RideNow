@@ -23,9 +23,11 @@ import com.example.ridenow.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 
 public class CreatingRidePage extends AppCompatActivity {
@@ -134,15 +136,20 @@ public class CreatingRidePage extends AppCompatActivity {
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(driversnipperfromlocations.equals("Select Location") || driversnipperTolocations.equals("Select Location") || price != null){
+                if(driversnipperfromlocations.equals("Select Location") || driversnipperTolocations.equals("Select Location") || price == null){
                     Toast.makeText(CreatingRidePage.this,"please fill all the fields",Toast.LENGTH_SHORT).show();
                 }else{
                     Intent intent = new Intent(CreatingRidePage.this, ConfirmRidePage.class);
+
                     startActivity(intent);
-                    finish();
+
                 }
             }
         });
+
+
+
+
 
 
 

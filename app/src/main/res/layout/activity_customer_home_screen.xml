@@ -35,7 +35,8 @@
         android:layout_marginTop="150dp"
         android:layout_marginBottom="24dp"
         android:gravity="center"
-        android:paddingBottom="16dp"
+        android:paddingBottom="1dp"
+        android:layout_margin="6dp"
         android:text="@string/search_for_rides"
         android:textColor="@color/black"
         android:textSize="30sp"
@@ -50,7 +51,7 @@
         android:backgroundTint="@color/white"
         android:textColor="@color/black"
         android:gravity="end"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="2dp" />
 
     <Spinner
         android:id="@+id/snipperfromlocations"
@@ -58,7 +59,7 @@
         android:layout_height="48dp"
         android:textColorHint="@color/white"
         android:spinnerMode="dropdown"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="6dp"
         />
 
     <TextView
@@ -68,7 +69,7 @@
         android:text="To Address"
         android:textSize="16sp"
         android:textColor="@color/black"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="2dp" />
 
 
     <Spinner
@@ -77,7 +78,14 @@
         android:layout_height="48dp"
         android:spinnerMode="dropdown"
         android:scrollbarStyle="insideInset"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="6dp"
+
+        />
+
+    <DatePicker
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        android:layout_marginBottom="12dp"
         />
 
     <Button
