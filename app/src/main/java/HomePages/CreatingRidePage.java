@@ -33,7 +33,7 @@ import java.util.List;
 public class CreatingRidePage extends AppCompatActivity {
 
     LinearLayout lll;
-    TextView driverfromAddresstitle,driverToAddresstitle;
+    TextView driverfromAddresstitle,driverToAddresstitle,bio;
 
     EditText price;
 
@@ -51,6 +51,8 @@ public class CreatingRidePage extends AppCompatActivity {
     List<String> filteredLocations;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +67,9 @@ public class CreatingRidePage extends AppCompatActivity {
        datepicker = findViewById(R.id.datepicker);
        price = findViewById(R.id.price);
         uploadBtn = findViewById(R.id.uploadBtn);
+        bio = findViewById(R.id.bio);
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         locationsArray = getResources().getStringArray(R.array.locations_array);
         filteredLocations = new ArrayList<>(Arrays.asList(locationsArray));
@@ -136,16 +141,26 @@ public class CreatingRidePage extends AppCompatActivity {
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(driversnipperfromlocations.equals("Select Location") || driversnipperTolocations.equals("Select Location") || price == null){
-                    Toast.makeText(CreatingRidePage.this,"please fill all the fields",Toast.LENGTH_SHORT).show();
-                }else{
+
+                String fromLocation = driversnipperfromlocations.getSelectedItem().toString();
+                String toLocation = driversnipperTolocations.getSelectedItem().toString();
+
+                if (!fromLocation.equals("Select Location") && !toLocation.equals("Select Location")) {
                     Intent intent = new Intent(CreatingRidePage.this, ConfirmRidePage.class);
-
                     startActivity(intent);
-
+                    finish();
+                } else {
+                    Toast.makeText(CreatingRidePage.this, "Please select all the fields", Toast.LENGTH_SHORT).show();
                 }
+
+
             }
         });
+
+        // saving the data of the rider input
+
+
+
 
 
 

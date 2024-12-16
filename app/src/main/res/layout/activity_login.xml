@@ -20,6 +20,7 @@
         android:layout_margin="12dp"
        android:paddingBottom="60dp"
         />
+
     <EditText
         android:id="@+id/loginEmail"
         android:layout_width="match_parent"

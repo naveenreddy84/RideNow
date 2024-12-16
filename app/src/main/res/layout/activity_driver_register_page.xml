@@ -38,10 +38,7 @@
         android:textColor="@color/white"
         android:hint="@string/please_enter_email"
         android:inputType="textEmailAddress"
-
-
         android:padding="16dp"
-
         android:layout_marginBottom="20dp" />
 
 
@@ -69,6 +66,17 @@
         android:padding="16dp"
 
         android:layout_marginBottom="20dp" />
+
+    <EditText
+        android:id="@+id/driverphonenumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/white"
+        android:hint="Enter your PhoneNumber"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/white"
+        android:inputType="number"
+        />
 
 
 

@@ -31,7 +31,7 @@ public class DriverRegisterPage extends AppCompatActivity {
     TextView registerLink;
 
     Button registerBtn;
-    EditText registerEmail, registerPassword, confirmPassword,driverusername;
+    EditText registerEmail, registerPassword, confirmPassword,driverusername,driverphonenumber;
 
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -50,6 +50,8 @@ public class DriverRegisterPage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+
+        driverphonenumber = findViewById(R.id.driverphonenumber);
         driverusername = findViewById(R.id.driverusername);
         registerBtn = findViewById(R.id.registerBtn);
         registerEmail = findViewById(R.id.registerEmail);
@@ -81,6 +83,7 @@ public class DriverRegisterPage extends AppCompatActivity {
             String cPassword = confirmPassword.getText().toString().trim();
             String pswd = registerPassword.getText().toString().trim();
             String  uname  =  driverusername.getText().toString().trim();
+            String phonenumber =  driverphonenumber.getText().toString().trim();
 
 
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pswd) || TextUtils.isEmpty(cPassword)) {
@@ -105,6 +108,11 @@ public class DriverRegisterPage extends AppCompatActivity {
                 confirmPassword.requestFocus();
                 return;
             }
+            if(TextUtils.isEmpty(uname) || TextUtils.isEmpty(phonenumber)){
+                Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
 
 
             mAuth.createUserWithEmailAndPassword(email, pswd).addOnCompleteListener(this, task -> {
@@ -117,7 +125,7 @@ public class DriverRegisterPage extends AppCompatActivity {
                         user.sendEmailVerification().addOnCompleteListener( emailTask -> {
                             if(emailTask.isSuccessful()){
                                 Toast.makeText(this, "Registration Successful.please verify your email", Toast.LENGTH_SHORT).show();
-                                Drivers Driver = new Drivers(email, cPassword, pswd,uname);
+                                Drivers Driver = new Drivers(email, cPassword, pswd,uname,phonenumber);
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                                 db.collection("Drivers").add(Driver);
 
