@@ -40,12 +40,7 @@
 
 
 
-            <TextView
-                android:id="@+id/rideDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ride Date :"
-                android:textSize="16sp"/>
+
 
             <TextView
                 android:id="@+id/rideFromLocation"
@@ -60,6 +55,12 @@
                 android:layout_height="wrap_content"
                 android:text="To Location :"
                 android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/rideDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ride Date :"
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/ridePrice"
@@ -67,6 +68,12 @@
                 android:layout_height="wrap_content"
                 android:text="Price :"
                 android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/Bio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bio:"
+                />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
