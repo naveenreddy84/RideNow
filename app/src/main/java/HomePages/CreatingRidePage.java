@@ -8,22 +8,20 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.ridenow.ConfirmRidePage;
 import com.example.ridenow.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +30,8 @@ import java.util.List;
 
 public class CreatingRidePage extends AppCompatActivity {
 
-    LinearLayout lll;
+
+
     TextView driverfromAddresstitle,driverToAddresstitle,bio;
 
     EditText price;
@@ -46,6 +45,9 @@ public class CreatingRidePage extends AppCompatActivity {
 
     FirebaseFirestore db;
     FirebaseAuth mAuth;
+
+
+  private  String formattedDate;
 
     String[] locationsArray;
     List<String> filteredLocations;
@@ -70,6 +72,7 @@ public class CreatingRidePage extends AppCompatActivity {
         bio = findViewById(R.id.bio);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+
 
         locationsArray = getResources().getStringArray(R.array.locations_array);
         filteredLocations = new ArrayList<>(Arrays.asList(locationsArray));
@@ -119,9 +122,9 @@ public class CreatingRidePage extends AppCompatActivity {
                 filteredLocations
         );
         toAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        driversnipperTolocations .setAdapter(toAdapter);
+        driversnipperTolocations.setAdapter(toAdapter);
 
-        driversnipperTolocations .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        driversnipperTolocations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedToLocation = filteredLocations.get(position);
@@ -143,12 +146,44 @@ public class CreatingRidePage extends AppCompatActivity {
             public void onClick(View v) {
 
                 String fromLocation = driversnipperfromlocations.getSelectedItem().toString();
-                String toLocation = driversnipperTolocations.getSelectedItem().toString();
+                String ToLocation =  driversnipperTolocations.getSelectedItem().toString();
+                String  Price = price.getText().toString().trim();
+                String Bio = bio.getText().toString().trim();
+                String formatteddate = formattedDate;
 
-                if (!fromLocation.equals("Select Location") && !toLocation.equals("Select Location")) {
-                    Intent intent = new Intent(CreatingRidePage.this, ConfirmRidePage.class);
-                    startActivity(intent);
-                    finish();
+
+                if (!fromLocation.equals("Select Location") && !ToLocation.equals("Select Location") && !Price.isEmpty() && !Bio.isEmpty() && formatteddate != null) {
+
+
+                Map<String,Object> rideData = new HashMap<>();
+
+                rideData.put("fromLocation",fromLocation);
+                rideData.put("ToLocation",ToLocation);
+                rideData.put("formatedDate",formatteddate);
+                rideData.put("Price",Price);
+                rideData.put("Bio",Bio);
+
+
+                // saving data in the 'rides' under drivers document
+
+                db.collection("rides")
+                        .add(rideData)
+                        .addOnSuccessListener(documentReference -> {
+
+                            String rideId = documentReference.getId();
+
+                            Intent intent = new Intent(CreatingRidePage.this, ConfirmRidePage.class);
+                            intent.putExtra("rideId",rideId);
+                            startActivity(intent);
+                            finish();
+
+                        })
+                        .addOnFailureListener(e -> {
+                            System.out.println("Error adding data: " + e.getMessage());
+                        });
+
+
+
                 } else {
                     Toast.makeText(CreatingRidePage.this, "Please select all the fields", Toast.LENGTH_SHORT).show();
                 }
@@ -157,7 +192,32 @@ public class CreatingRidePage extends AppCompatActivity {
             }
         });
 
-        // saving the data of the rider input
+        //   saving the date selected from the xml file
+
+
+        datepicker.init(
+                datepicker.getYear(),
+                datepicker.getMonth(),
+                datepicker.getDayOfMonth(),
+                new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        Calendar selectedCalenderDate = Calendar.getInstance();
+                        selectedCalenderDate.set(dayOfMonth, monthOfYear, year);
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                        formattedDate = sdf.format(selectedCalenderDate.getTime());
+
+                    }
+                });
+
+
+
+
+
+
+
+
 
 
 
