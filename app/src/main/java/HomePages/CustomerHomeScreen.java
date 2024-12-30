@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,23 +15,28 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ridenow.R;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class CustomerHomeScreen extends AppCompatActivity {
 
+
     TextView title, fromAddresstitle, ToAddresstitle;
     Spinner snipperfromlocations, snipperTolocations;
 
+    DatePicker date;
     Button searchBtn;
-
-
     FirebaseAuth mAuth;
     FirebaseFirestore db;
+
 
     String[] locationsArray;
     List<String> filteredLocations;
@@ -46,27 +51,29 @@ public class CustomerHomeScreen extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-
-
         title = findViewById(R.id.title);
         fromAddresstitle = findViewById(R.id.fromAddresstitle);
         ToAddresstitle = findViewById(R.id.ToAddresstitle);
         snipperfromlocations = findViewById(R.id.snipperfromlocations);
         snipperTolocations = findViewById(R.id.snipperTolocations);
+        date = findViewById(R.id.date);
         searchBtn = findViewById(R.id.searchBtn);
-
-
-
-
-
 
 
         locationsArray = getResources().getStringArray(R.array.locations_array);
         filteredLocations = new ArrayList<>(Arrays.asList(locationsArray));
 
 
-       FromAdapter();
+        FromAdapter();
         ToAdapter();
+
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performSearch();
+            }
+        });
     }
 
     private void FromAdapter() {
@@ -84,14 +91,9 @@ public class CustomerHomeScreen extends AppCompatActivity {
                 String selectedFromLocation = locationsArray[position];
 
                 if (!selectedFromLocation.equals("Select Location")) {
-
-
-
                     filteredLocations = new ArrayList<>(Arrays.asList(locationsArray));
                     filteredLocations.remove(selectedFromLocation);
-
-
-                   ToAdapter();
+                    ToAdapter();
                 }
             }
 
@@ -115,7 +117,6 @@ public class CustomerHomeScreen extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedToLocation = filteredLocations.get(position);
-
                 if (!selectedToLocation.equals("Select Location")) {
 
                 }
@@ -126,35 +127,70 @@ public class CustomerHomeScreen extends AppCompatActivity {
                 Toast.makeText(CustomerHomeScreen.this, "No location selected", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void performSearch() {
+        String fromLocation = snipperfromlocations.getSelectedItem().toString();
+        String toLocation = snipperTolocations.getSelectedItem().toString();
+
+       // retriving the date
+        int day = date.getDayOfMonth();
+        int month = date.getMonth();
+        int year = date.getYear();
+
+        // Create a Date object with the selected date
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(day, month, year, 0, 0, 0);
+        Date selectedDate = calendar.getTime();
+        long selectedDateInMillis = selectedDate.getTime();
 
 
+        Calendar defaultCalendar = Calendar.getInstance();
+        defaultCalendar.set(2024, Calendar.DECEMBER, 30, 0, 0, 0);
+        defaultCalendar.set(Calendar.MILLISECOND, 0);
+        long defaultDateInMillis = defaultCalendar.getTimeInMillis();
 
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String fromLocation = snipperfromlocations.getSelectedItem().toString();
-                String toLocation = snipperTolocations.getSelectedItem().toString();
+        // Convert the Date to Firestore Timestamp
 
-                if (!fromLocation.equals("Select Location") && !toLocation.equals("Select Location")) {
-                    Intent intent = new Intent(CustomerHomeScreen.this, availablerides.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(CustomerHomeScreen.this, "Please select both From and To locations", Toast.LENGTH_SHORT).show();
-                }
+        Timestamp firestoreTimestamp = new Timestamp(selectedDate);
+
+        if (!fromLocation.equals("Select Location") && !toLocation.equals("Select Location")) {
+            if (selectedDateInMillis < defaultDateInMillis) {
+                Toast.makeText(this, "select correct Date", Toast.LENGTH_SHORT).show();
+            } else {
+                db.collection("rides")
+                        .whereEqualTo("fromLocation", fromLocation)
+                        .whereEqualTo("toLocation", toLocation)
+                        .whereEqualTo("formatedDate", firestoreTimestamp)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful() && task.getResult() != null) {
+                                List<String> availableRides = new ArrayList<>();
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    availableRides.add(document.getId()); // Collect ride IDs or details
+                                }
+                                if (availableRides.isEmpty()) {
+                                    Toast.makeText(this, "No rides available.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Intent intent = new Intent(CustomerHomeScreen.this, availablerides.class);
+                                    intent.putStringArrayListExtra("availableRides", new ArrayList<>(availableRides));
+                                    startActivity(intent);
+                                }
+                            } else {
+                                Toast.makeText(this, "Error fetching rides.", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
-        });
-
-
-
-
-
-
-
-
+            } else{
+                Toast.makeText(this, "Please select both From and To locations", Toast.LENGTH_SHORT).show();
+            }
 
     }
+
 }
+
 
 
 

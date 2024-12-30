@@ -18,8 +18,8 @@
    <LinearLayout
 
        android:id="@+id/Box"
-       android:layout_width="320dp"
-       android:layout_height="500dp"
+       android:layout_width="400dp"
+       android:layout_height="800dp"
        android:orientation="vertical"
        android:padding="16dp"
        android:background="@color/white"
@@ -37,8 +37,12 @@
           android:textColor="@color/black"
            android:textStyle="bold"
            android:textSize="40dp"
-           android:layout_marginBottom="360dp"
+           android:layout_marginBottom="600dp"
            />
+
+
+
+
 
 
        </LinearLayout>

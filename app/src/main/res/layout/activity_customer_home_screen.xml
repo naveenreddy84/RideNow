@@ -83,6 +83,7 @@
         />
 
     <DatePicker
+        android:id="@+id/date"
         android:layout_width="300dp"
         android:layout_height="350dp"
         android:layout_marginBottom="12dp"
