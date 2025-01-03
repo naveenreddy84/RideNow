@@ -32,7 +32,7 @@ public class CreatingRidePage extends AppCompatActivity {
 
 
 
-    TextView driverfromAddresstitle,driverToAddresstitle,bio;
+    TextView driverfromAddresstitle,driverToAddresstitle,time;
 
     EditText price;
 
@@ -69,7 +69,7 @@ public class CreatingRidePage extends AppCompatActivity {
        datepicker = findViewById(R.id.datepicker);
        price = findViewById(R.id.price);
         uploadBtn = findViewById(R.id.uploadBtn);
-        bio = findViewById(R.id.bio);
+        time = findViewById(R.id.time);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
@@ -141,6 +141,29 @@ public class CreatingRidePage extends AppCompatActivity {
         });
 
 
+
+
+        datepicker.init(
+                datepicker.getYear(),
+                datepicker.getMonth(),
+                datepicker.getDayOfMonth(),
+                new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        Calendar selectedCalenderDate = Calendar.getInstance();
+                        selectedCalenderDate.set(dayOfMonth, monthOfYear, year);
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                        formattedDate = sdf.format(selectedCalenderDate.getTime());
+
+                    }
+                });
+
+
+
+        //   saving the date selected from the xml file
+
+
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,20 +171,20 @@ public class CreatingRidePage extends AppCompatActivity {
                 String fromLocation = driversnipperfromlocations.getSelectedItem().toString();
                 String ToLocation =  driversnipperTolocations.getSelectedItem().toString();
                 String  Price = price.getText().toString().trim();
-                String Bio = bio.getText().toString().trim();
-                String formatteddate = formattedDate;
+                String Time = time.getText().toString().trim();
+                String formatedDate = formattedDate;
 
 
-                if (!fromLocation.equals("Select Location") && !ToLocation.equals("Select Location") && !Price.isEmpty() && !Bio.isEmpty() && formatteddate != null) {
+                if (!fromLocation.equals("Select Location") && !ToLocation.equals("Select Location") && !Price.isEmpty() && !Time.isEmpty() && formatedDate != null) {
 
 
                 Map<String,Object> rideData = new HashMap<>();
 
                 rideData.put("fromLocation",fromLocation);
                 rideData.put("ToLocation",ToLocation);
-                rideData.put("formatedDate",formatteddate);
+                rideData.put("formatedDate",formatedDate);
                 rideData.put("Price",Price);
-                rideData.put("Bio",Bio);
+                rideData.put("time",Time);
 
 
                 // saving data in the 'rides' under drivers document
@@ -192,24 +215,10 @@ public class CreatingRidePage extends AppCompatActivity {
             }
         });
 
-        //   saving the date selected from the xml file
 
 
-        datepicker.init(
-                datepicker.getYear(),
-                datepicker.getMonth(),
-                datepicker.getDayOfMonth(),
-                new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        Calendar selectedCalenderDate = Calendar.getInstance();
-                        selectedCalenderDate.set(dayOfMonth, monthOfYear, year);
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                        formattedDate = sdf.format(selectedCalenderDate.getTime());
 
-                    }
-                });
 
 
 

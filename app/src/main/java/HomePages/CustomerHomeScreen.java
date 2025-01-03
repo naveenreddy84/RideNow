@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -138,18 +139,31 @@ public class CustomerHomeScreen extends AppCompatActivity {
         int month = date.getMonth();
         int year = date.getYear();
 
-        // Create a Date object with the selected date
-
         Calendar calendar = Calendar.getInstance();
-        calendar.set(day, month, year, 0, 0, 0);
-        Date selectedDate = calendar.getTime();
-        long selectedDateInMillis = selectedDate.getTime();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);  // month is 0-based (January = 0)
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        long selectedDateInMillis = calendar.getTimeInMillis();
 
 
+// Set the default date
         Calendar defaultCalendar = Calendar.getInstance();
-        defaultCalendar.set(2024, Calendar.DECEMBER, 30, 0, 0, 0);
+        defaultCalendar.set(Calendar.YEAR, 2024);
+        defaultCalendar.set(Calendar.MONTH, Calendar.DECEMBER);  // December is Calendar.DECEMBER (11)
+        defaultCalendar.set(Calendar.DAY_OF_MONTH, 30);
+        defaultCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        defaultCalendar.set(Calendar.MINUTE, 0);
+        defaultCalendar.set(Calendar.SECOND, 0);
         defaultCalendar.set(Calendar.MILLISECOND, 0);
         long defaultDateInMillis = defaultCalendar.getTimeInMillis();
+
+
+        // Create a Date object from milliseconds
+        Date selectedDate = new Date(selectedDateInMillis);
 
         // Convert the Date to Firestore Timestamp
 
@@ -166,7 +180,7 @@ public class CustomerHomeScreen extends AppCompatActivity {
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful() && task.getResult() != null) {
-                                List<String> availableRides = new ArrayList<>();
+                                ArrayList<String> availableRides = new ArrayList<>();
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     availableRides.add(document.getId()); // Collect ride IDs or details
                                 }
@@ -174,7 +188,7 @@ public class CustomerHomeScreen extends AppCompatActivity {
                                     Toast.makeText(this, "No rides available.", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Intent intent = new Intent(CustomerHomeScreen.this, availablerides.class);
-                                    intent.putStringArrayListExtra("availableRides", new ArrayList<>(availableRides));
+                                    intent.putStringArrayListExtra("availableRides", availableRides);
                                     startActivity(intent);
                                 }
                             } else {

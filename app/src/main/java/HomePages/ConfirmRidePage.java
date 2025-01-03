@@ -16,7 +16,7 @@ public class ConfirmRidePage extends AppCompatActivity {
 
  FirebaseAuth mAuth;
  FirebaseFirestore db;
-    TextView titleyourridedetails,rideDate,rideFromLocation,rideToLocation,ridePrice,Bio;
+    TextView titleyourridedetails,rideDate,rideFromLocation,rideToLocation,ridePrice,time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class ConfirmRidePage extends AppCompatActivity {
         rideFromLocation = findViewById(R.id.rideFromLocation);
         rideToLocation = findViewById(R.id.rideToLocation);
         ridePrice = findViewById(R.id.ridePrice);
-        Bio = findViewById(R.id.Bio);
+       time = findViewById(R.id.time);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
@@ -46,7 +46,7 @@ public class ConfirmRidePage extends AppCompatActivity {
                             String fromLocation = documentSnapshot.getString("fromLocation");
                             String ToLocation = documentSnapshot.getString("ToLocation");
                             String price = documentSnapshot.getString("Price");
-                            String bio = documentSnapshot.getString("Bio");
+                            String Time = documentSnapshot.getString("time");
                             String formattedDate = documentSnapshot.getString("formatedDate");
 
                             // setting  the data to the textviews
@@ -55,7 +55,7 @@ public class ConfirmRidePage extends AppCompatActivity {
                             rideToLocation.setText(String.join(" ", "ToLocation:", ToLocation));
                             rideDate.setText(String.join(" ", "Date:", formattedDate));
                             ridePrice.setText(String.join(" ", "Price:", String.valueOf(price)));
-                            Bio.setText(String.join(" ", "Bio:", bio));
+                            time.setText(String.join(" ", "time:", Time));
 
                         }
                             }).addOnFailureListener(e -> {

@@ -76,7 +76,7 @@
             />
 
         <EditText
-            android:id="@+id/bio"
+            android:id="@+id/time"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:hint="Enter the time here... any Instructions(optional)"
