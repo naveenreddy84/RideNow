@@ -134,14 +134,16 @@ public class CustomerHomeScreen extends AppCompatActivity {
         String fromLocation = snipperfromlocations.getSelectedItem().toString();
         String toLocation = snipperTolocations.getSelectedItem().toString();
 
-       // retriving the date
+        // Retrieving the date from the DatePicker
+
         int day = date.getDayOfMonth();
         int month = date.getMonth();
         int year = date.getYear();
 
+
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);  // month is 0-based (January = 0)
+        calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, day);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -149,61 +151,49 @@ public class CustomerHomeScreen extends AppCompatActivity {
         calendar.set(Calendar.MILLISECOND, 0);
         long selectedDateInMillis = calendar.getTimeInMillis();
 
+        // Getting  the current date in milliseconds
+        long currentDateInMillis = System.currentTimeMillis();
 
-// Set the default date
-        Calendar defaultCalendar = Calendar.getInstance();
-        defaultCalendar.set(Calendar.YEAR, 2024);
-        defaultCalendar.set(Calendar.MONTH, Calendar.DECEMBER);  // December is Calendar.DECEMBER (11)
-        defaultCalendar.set(Calendar.DAY_OF_MONTH, 30);
-        defaultCalendar.set(Calendar.HOUR_OF_DAY, 0);
-        defaultCalendar.set(Calendar.MINUTE, 0);
-        defaultCalendar.set(Calendar.SECOND, 0);
-        defaultCalendar.set(Calendar.MILLISECOND, 0);
-        long defaultDateInMillis = defaultCalendar.getTimeInMillis();
+        // Checking  if the selected date is in the past
+        if (selectedDateInMillis < currentDateInMillis) {
+            Toast.makeText(this, "Please select a valid date (today or in the future)", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-
-        // Create a Date object from milliseconds
+        // Creating  a Date object to store selectedDate in the firestore.
         Date selectedDate = new Date(selectedDateInMillis);
-
-        // Convert the Date to Firestore Timestamp
-
         Timestamp firestoreTimestamp = new Timestamp(selectedDate);
 
         if (!fromLocation.equals("Select Location") && !toLocation.equals("Select Location")) {
-            if (selectedDateInMillis < defaultDateInMillis) {
-                Toast.makeText(this, "select correct Date", Toast.LENGTH_SHORT).show();
-            } else {
-                db.collection("rides")
-                        .whereEqualTo("fromLocation", fromLocation)
-                        .whereEqualTo("toLocation", toLocation)
-                        .whereEqualTo("formatedDate", firestoreTimestamp)
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful() && task.getResult() != null) {
-                                ArrayList<String> availableRides = new ArrayList<>();
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    availableRides.add(document.getId()); // Collect ride IDs or details
-                                }
-                                if (availableRides.isEmpty()) {
-                                    Toast.makeText(this, "No rides available.", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Intent intent = new Intent(CustomerHomeScreen.this, availablerides.class);
-                                    intent.putStringArrayListExtra("availableRides", availableRides);
-                                    startActivity(intent);
-                                }
-                            } else {
-                                Toast.makeText(this, "Error fetching rides.", Toast.LENGTH_SHORT).show();
+            db.collection("rides")
+                    .whereEqualTo("fromLocation", fromLocation)
+                    .whereEqualTo("toLocation", toLocation)
+
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            ArrayList<String> availableRides = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                availableRides.add(document.getId()); // Collect ride IDs or details
                             }
-                        })
-                        .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-            }
-            } else{
-                Toast.makeText(this, "Please select both From and To locations", Toast.LENGTH_SHORT).show();
-            }
-
+                            if (availableRides.isEmpty()) {
+                                Toast.makeText(this, "No rides available.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Intent intent = new Intent(CustomerHomeScreen.this, availablerides.class);
+                                intent.putStringArrayListExtra("availableRides", availableRides);
+                                startActivity(intent);
+                            }
+                        } else {
+                            Toast.makeText(this, "Error fetching rides.", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        } else {
+            Toast.makeText(this, "Please select both From and To locations", Toast.LENGTH_SHORT).show();
+        }
     }
-
 }
+
 
 
 

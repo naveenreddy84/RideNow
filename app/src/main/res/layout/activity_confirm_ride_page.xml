@@ -69,10 +69,10 @@
                 android:text="Price :"
                 android:textSize="16sp"/>
             <TextView
-                android:id="@+id/Bio"
+                android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bio:"
+                android:text="time:"
                 />
 
         </LinearLayout>

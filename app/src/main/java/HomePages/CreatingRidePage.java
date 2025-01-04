@@ -8,78 +8,76 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
-import androidx.activity.EdgeToEdge;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ridenow.R;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
-
+import java.util.Locale;
+import java.util.Map;
 
 public class CreatingRidePage extends AppCompatActivity {
 
+    private TextView driverfromAddresstitle, driverToAddresstitle, time;
+    private EditText price;
+    private Button uploadBtn;
+    private Spinner driversnipperfromlocations, driversnipperTolocations;
+    private DatePicker datepicker;
+
+    private FirebaseFirestore db;
 
 
-    TextView driverfromAddresstitle,driverToAddresstitle,time;
-
-    EditText price;
-
-    Button uploadBtn;
-
-    Spinner driversnipperfromlocations,driversnipperTolocations;
-
-
-    DatePicker datepicker;
-
-    FirebaseFirestore db;
-    FirebaseAuth mAuth;
-
-
-  private  String formattedDate;
-
-    String[] locationsArray;
-    List<String> filteredLocations;
-
-
-
+    private Timestamp formatedDateTimestamp;
+    private String[] locationsArray;
+    private List<String> filteredLocations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.driver_creating_ride_page);
 
+        // Initialize views and Firebase instances
+        initializeComponents();
 
+        // Set up location spinners
+        FromAdapter();
+        ToAdapter();
+
+        // Initialize DatePicker
+        initializeDatePicker();
+
+        // Set up upload button
+        setupUploadButton();
+    }
+
+    private void initializeComponents() {
         driverfromAddresstitle = findViewById(R.id.driverfromAddresstitle);
-       driverToAddresstitle = findViewById(R.id.driverToAddresstitle);
-       driversnipperfromlocations = findViewById(R.id.driversnipperfromlocations);
-       driversnipperTolocations = findViewById(R.id.driversnipperTolocations);
-       datepicker = findViewById(R.id.datepicker);
-       price = findViewById(R.id.price);
+        driverToAddresstitle = findViewById(R.id.driverToAddresstitle);
+        driversnipperfromlocations = findViewById(R.id.driversnipperfromlocations);
+        driversnipperTolocations = findViewById(R.id.driversnipperTolocations);
+        datepicker = findViewById(R.id.datepicker);
+        price = findViewById(R.id.price);
         uploadBtn = findViewById(R.id.uploadBtn);
         time = findViewById(R.id.time);
+
         db = FirebaseFirestore.getInstance();
-        mAuth = FirebaseAuth.getInstance();
 
 
         locationsArray = getResources().getStringArray(R.array.locations_array);
         filteredLocations = new ArrayList<>(Arrays.asList(locationsArray));
-
-
-        FromAdapter();
-        ToAdapter();
     }
 
     private void FromAdapter() {
@@ -97,14 +95,9 @@ public class CreatingRidePage extends AppCompatActivity {
                 String selectedFromLocation = locationsArray[position];
 
                 if (!selectedFromLocation.equals("Select Location")) {
-
-
-
                     filteredLocations = new ArrayList<>(Arrays.asList(locationsArray));
                     filteredLocations.remove(selectedFromLocation);
-
-
-                    ToAdapter();
+                    ToAdapter(); // Refresh ToAdapter
                 }
             }
 
@@ -127,11 +120,7 @@ public class CreatingRidePage extends AppCompatActivity {
         driversnipperTolocations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedToLocation = filteredLocations.get(position);
-
-                if (!selectedToLocation.equals("Select Location")) {
-
-                }
+                // No specific logic needed here for ToAdapter
             }
 
             @Override
@@ -139,10 +128,9 @@ public class CreatingRidePage extends AppCompatActivity {
                 Toast.makeText(CreatingRidePage.this, "No location selected", Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
-
-
-
+    private void initializeDatePicker() {
         datepicker.init(
                 datepicker.getYear(),
                 datepicker.getMonth(),
@@ -150,96 +138,92 @@ public class CreatingRidePage extends AppCompatActivity {
                 new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        Calendar selectedCalenderDate = Calendar.getInstance();
-                        selectedCalenderDate.set(dayOfMonth, monthOfYear, year);
+                        // Create a Calendar instance with the selected date
+                        Calendar selectedCalendarDate = Calendar.getInstance();
+                        selectedCalendarDate.set(year, monthOfYear, dayOfMonth);
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                        formattedDate = sdf.format(selectedCalenderDate.getTime());
+                        // Convert the Calendar date to a Date object
+                        Date selectedDate = selectedCalendarDate.getTime();
 
+                        // Convert Date to Firestore Timestamp
+                        Timestamp firestoreTimestamp = new Timestamp(selectedDate);
+                        System.out.println("Selected Timestamp: " + firestoreTimestamp);
+
+                        // Store the Timestamp in a global variable for later use
+                        formatedDateTimestamp = firestoreTimestamp;
                     }
                 });
+    }
 
 
-
-        //   saving the date selected from the xml file
-
-
+    private void setupUploadButton() {
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String fromLocation = driversnipperfromlocations.getSelectedItem().toString();
-                String ToLocation =  driversnipperTolocations.getSelectedItem().toString();
-                String  Price = price.getText().toString().trim();
-                String Time = time.getText().toString().trim();
-                String formatedDate = formattedDate;
+                String toLocation = driversnipperTolocations.getSelectedItem().toString();
+                String priceInput = price.getText().toString().trim();
+                String timeInput = time.getText().toString().trim();
 
+                // Check if all required fields are filled
+                if (!fromLocation.equals("Select Location") &&
+                        !toLocation.equals("Select Location") &&
+                        !priceInput.isEmpty() &&
+                        !timeInput.isEmpty() &&
+                        formatedDateTimestamp != null) {
 
-                if (!fromLocation.equals("Select Location") && !ToLocation.equals("Select Location") && !Price.isEmpty() && !Time.isEmpty() && formatedDate != null) {
+                    //  saving the data  to Firestore
+                    Map<String, Object> rideData = new HashMap<>();
+                    rideData.put("fromLocation", fromLocation);
+                    rideData.put("toLocation", toLocation);
+                    rideData.put("timestampDate", formatedDateTimestamp);
+                    rideData.put("price", priceInput);
+                    rideData.put("time", timeInput);
 
-
-                Map<String,Object> rideData = new HashMap<>();
-
-                rideData.put("fromLocation",fromLocation);
-                rideData.put("ToLocation",ToLocation);
-                rideData.put("formatedDate",formatedDate);
-                rideData.put("Price",Price);
-                rideData.put("time",Time);
-
-
-                // saving data in the 'rides' under drivers document
-
-                db.collection("rides")
-                        .add(rideData)
-                        .addOnSuccessListener(documentReference -> {
-
-                            String rideId = documentReference.getId();
-
-                            Intent intent = new Intent(CreatingRidePage.this, ConfirmRidePage.class);
-                            intent.putExtra("rideId",rideId);
-                            startActivity(intent);
-                            finish();
-
-                        })
-                        .addOnFailureListener(e -> {
-                            System.out.println("Error adding data: " + e.getMessage());
-                        });
-
-
-
+                    // Save the data to Firestore
+                    db.collection("rides")
+                            .add(rideData)
+                            .addOnSuccessListener(documentReference -> {
+                                String rideId = documentReference.getId();
+                                Intent intent = new Intent(CreatingRidePage.this, ConfirmRidePage.class);
+                                intent.putExtra("rideId", rideId);
+                                startActivity(intent);
+                            })
+                            .addOnFailureListener(e ->
+                                    Toast.makeText(CreatingRidePage.this, "Error adding data: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                            );
                 } else {
-                    Toast.makeText(CreatingRidePage.this, "Please select all the fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreatingRidePage.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
