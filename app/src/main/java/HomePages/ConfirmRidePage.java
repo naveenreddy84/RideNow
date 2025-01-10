@@ -54,7 +54,7 @@ public class ConfirmRidePage extends AppCompatActivity {
                             String Time = documentSnapshot.getString("time");
 
                             // Retrieve timestampDate as Timestamp
-                            Timestamp timestampDate = documentSnapshot.getTimestamp("timestampDate");
+                            Timestamp timestampDate = documentSnapshot.getTimestamp("Timestamp");
 
                             // Format the timestamp to a readable date string
                             if (timestampDate != null) {

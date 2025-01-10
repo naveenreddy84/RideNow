@@ -176,7 +176,7 @@ public class CreatingRidePage extends AppCompatActivity {
                     Map<String, Object> rideData = new HashMap<>();
                     rideData.put("fromLocation", fromLocation);
                     rideData.put("toLocation", toLocation);
-                    rideData.put("timestampDate", formatedDateTimestamp);
+                    rideData.put("Timestamp", formatedDateTimestamp);
                     rideData.put("price", priceInput);
                     rideData.put("time", timeInput);
 

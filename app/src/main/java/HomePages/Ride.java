@@ -1,20 +1,31 @@
 package HomePages;
 
+import com.google.firebase.Timestamp;
+
 import java.io.Serializable;
 
 public class Ride implements Serializable {
-    private String fromLocation;
-    private String ToLocation;
-    private String time;
-    private String Price;
-    private String formatedDate;
 
-    public Ride(String fromLocation, String toLocation, String time, String price, String formattedDate) {
+    private String rideId;
+    private String fromLocation;
+    private String toLocation;
+    private String time;
+    private String price;
+    private Timestamp timestampDate;
+
+
+    public Ride(String rideId, String fromLocation, String toLocation, String time, String price, Timestamp timestampDate) {
+        this.rideId = rideId;
         this.fromLocation = fromLocation;
-        this.ToLocation = toLocation;
+        this.toLocation = toLocation;
         this.time = time;
-        this.Price = price;
-        this.formatedDate = formattedDate;
+        this.price = price;
+        this.timestampDate = timestampDate;
+    }
+
+
+    public String getRideId() {
+        return rideId;
     }
 
     public String getFromLocation() {
@@ -22,7 +33,7 @@ public class Ride implements Serializable {
     }
 
     public String getToLocation() {
-        return ToLocation;
+        return toLocation;
     }
 
     public String getTime() {
@@ -30,11 +41,12 @@ public class Ride implements Serializable {
     }
 
     public String getPrice() {
-        return Price;
+        return price;
     }
 
-    public String getFormattedDate() {
-        return formatedDate;
+    public Timestamp getTimestampDate() {
+        return timestampDate;
     }
 }
+
 

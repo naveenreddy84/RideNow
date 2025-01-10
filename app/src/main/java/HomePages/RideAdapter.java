@@ -1,32 +1,31 @@
 package HomePages;
 
+
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.content.Intent;
 
 import com.example.ridenow.R;
+import com.google.firebase.Timestamp;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class RideAdapter extends ArrayAdapter<Ride> {
 
-
-
-    TextView fromLocation,ToLocation,Price,time,formattedDate;
-    Button BookButton;
-
-     private Context context;
+    private Context context;
     private List<Ride> rides;
 
 
-
-
+    TextView fromLocation, toLocation, price, time, formatedDate;
+    Button bookButton;
 
     public RideAdapter(Context context, List<Ride> rides) {
         super(context, 0, rides);
@@ -41,35 +40,42 @@ public class RideAdapter extends ArrayAdapter<Ride> {
         }
 
         // Get current ride
-
-        Ride currentRide = rides.get(position);  // setting the position of ridedata based on index position.
+        Ride currentRide = rides.get(position);
 
         // Set the ride details
-        TextView fromLocation = convertView.findViewById(R.id.fromLocation);
-        TextView ToLocation = convertView.findViewById(R.id.ToLocation);
-        TextView Price = convertView.findViewById(R.id.Price);
-        TextView time = convertView.findViewById(R.id.time);
-        TextView formatedDate = convertView.findViewById(R.id.formatedDate);
-        Button bookButton = convertView.findViewById(R.id.BookButton);
+        fromLocation = convertView.findViewById(R.id.fromLocation);
+        toLocation = convertView.findViewById(R.id.toLocation);
+        price = convertView.findViewById(R.id.price);
+        time = convertView.findViewById(R.id.time);
+        formatedDate = convertView.findViewById(R.id.formatedDate);
+        bookButton = convertView.findViewById(R.id.BookButton);
 
         // Set the data for the current ride
-        fromLocation.setText(String.join(" ","From: " + currentRide.getFromLocation()));
-        ToLocation.setText(String.join(" ","To: " + currentRide.getToLocation()));
-        Price.setText(String.join("","Price: " + currentRide.getPrice()));
-        time.setText(String.join("","Time: " + currentRide.getTime()));
-        formatedDate.setText(String.join("","Date: " + currentRide.getFormattedDate()));
-
-
-        BookButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context,PaymentPage.class);
-                context.startActivity(intent);
+        if (currentRide != null) {
+            fromLocation.setText("From: " + currentRide.getFromLocation());
+            toLocation.setText("To: " + currentRide.getToLocation());
+            price.setText("Price: " + currentRide.getPrice());
+            time.setText("Time: " + currentRide.getTime());
+            Timestamp timestamp = currentRide.getTimestampDate();
+            if (timestamp != null) {
+                Date date = timestamp.toDate();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String formattedDateStr = sdf.format(date);
+                formatedDate.setText("Date: " + formattedDateStr);
+            } else {
+                formatedDate.setText("Date not available");
             }
-        });
+        }
 
+
+        // Set up the Book Button
+        bookButton.setOnClickListener(v -> {
+            Intent intent = new Intent(context, PaymentPage.class);
+            context.startActivity(intent);
+        });
 
         return convertView;
     }
 }
+
 

@@ -2,6 +2,7 @@ package HomePages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.time.Instant;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -28,7 +29,6 @@ import java.util.Date;
 import java.util.List;
 
 public class CustomerHomeScreen extends AppCompatActivity {
-
 
     TextView title, fromAddresstitle, ToAddresstitle;
     Spinner snipperfromlocations, snipperTolocations;
@@ -38,7 +38,6 @@ public class CustomerHomeScreen extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseFirestore db;
 
-
     String[] locationsArray;
     List<String> filteredLocations;
 
@@ -47,7 +46,6 @@ public class CustomerHomeScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_customer_home_screen);
-
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -60,14 +58,14 @@ public class CustomerHomeScreen extends AppCompatActivity {
         date = findViewById(R.id.date);
         searchBtn = findViewById(R.id.searchBtn);
 
-
         locationsArray = getResources().getStringArray(R.array.locations_array);
         filteredLocations = new ArrayList<>(Arrays.asList(locationsArray));
-
 
         FromAdapter();
         ToAdapter();
 
+        // Set DatePicker to disable past dates
+        setDatePickerToCurrentDate();
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +73,12 @@ public class CustomerHomeScreen extends AppCompatActivity {
                 performSearch();
             }
         });
+    }
+
+    private void setDatePickerToCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+        long currentDateInMillis = calendar.getTimeInMillis();
+        date.setMinDate(currentDateInMillis);  // Set minimum date to current date
     }
 
     private void FromAdapter() {
@@ -113,21 +117,6 @@ public class CustomerHomeScreen extends AppCompatActivity {
         );
         toAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         snipperTolocations.setAdapter(toAdapter);
-
-        snipperTolocations.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedToLocation = filteredLocations.get(position);
-                if (!selectedToLocation.equals("Select Location")) {
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(CustomerHomeScreen.this, "No location selected", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void performSearch() {
@@ -135,69 +124,53 @@ public class CustomerHomeScreen extends AppCompatActivity {
         String toLocation = snipperTolocations.getSelectedItem().toString();
 
         // Retrieving the date from the DatePicker
-
         int day = date.getDayOfMonth();
-        int month = date.getMonth();
+        int month = date.getMonth(); // 0-based index
         int year = date.getYear();
 
-
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, day);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(year, month, day, 0, 0, 0);
         long selectedDateInMillis = calendar.getTimeInMillis();
 
-        // Getting  the current date in milliseconds
-        long currentDateInMillis = System.currentTimeMillis();
-
-        // Checking  if the selected date is in the past
-        if (selectedDateInMillis < currentDateInMillis) {
-            Toast.makeText(this, "Please select a valid date (today or in the future)", Toast.LENGTH_SHORT).show();
+        // Check if valid From and To locations are selected
+        if (fromLocation.equals("Select Location") || toLocation.equals("Select Location")) {
+            Toast.makeText(this, "Please select both From and To locations", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Creating  a Date object to store selectedDate in the firestore.
         Date selectedDate = new Date(selectedDateInMillis);
-        Timestamp firestoreTimestamp = new Timestamp(selectedDate);
 
-        if (!fromLocation.equals("Select Location") && !toLocation.equals("Select Location")) {
-            db.collection("rides")
-                    .whereEqualTo("fromLocation", fromLocation)
-                    .whereEqualTo("toLocation", toLocation)
-
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful() && task.getResult() != null) {
-                            ArrayList<String> availableRides = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                availableRides.add(document.getId()); // Collect ride IDs or details
-                            }
-                            if (availableRides.isEmpty()) {
-                                Toast.makeText(this, "No rides available.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Intent intent = new Intent(CustomerHomeScreen.this, availablerides.class);
-                                intent.putStringArrayListExtra("availableRides", availableRides);
-                                startActivity(intent);
-                            }
-                        } else {
-                            Toast.makeText(this, "Error fetching rides.", Toast.LENGTH_SHORT).show();
+        db.collection("rides")
+                .whereEqualTo("fromLocation", fromLocation)
+                .whereEqualTo("toLocation", toLocation)
+                .whereGreaterThanOrEqualTo("Timestamp", new Timestamp(selectedDate)) // Filter based on the date
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        ArrayList<Ride> availableRides = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Ride ride = new Ride(
+                                    document.getId(),
+                                    document.getString("fromLocation"),
+                                    document.getString("toLocation"),
+                                    document.getString("price"),
+                                    document.getString("time"),
+                                    document.getTimestamp("Timestamp")
+                            );
+                            availableRides.add(ride);
                         }
-                    })
-                    .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-        } else {
-            Toast.makeText(this, "Please select both From and To locations", Toast.LENGTH_SHORT).show();
-        }
+                        if (availableRides.isEmpty()) {
+                            Toast.makeText(this, "No rides available.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Pass the available rides to the next activity
+                            Intent intent = new Intent(CustomerHomeScreen.this, availablerides.class);
+                            intent.putExtra("availableRides", availableRides);
+                            startActivity(intent);
+                        }
+                    } else {
+                        Toast.makeText(this, "Error fetching rides.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 }
-
-
-
-
-
-
-
-

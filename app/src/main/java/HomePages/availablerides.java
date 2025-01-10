@@ -2,61 +2,61 @@ package HomePages;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.ridenow.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class availablerides extends AppCompatActivity {
 
-
-
+    private ListView RidesListView;
+    private List<Ride> availableRides;
+    private RideAdapter rideAdapter;
     TextView availableRidesTitle;
-
-      private ListView RidesListView;
-
-    LinearLayout Box;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_availablerides);
 
-     availableRidesTitle = findViewById(R.id.availableRidesTitle);
-     RidesListView = findViewById(R.id.RidesListview);
-      Box = findViewById(R.id.Box);
+        availableRidesTitle = findViewById(R.id.availableRidesTitle);
+        RidesListView = findViewById(R.id.RidesListview);
 
-        // Retrieve the available rides passed from the previous activity
+        // Initialize the rides list
+        availableRides = new ArrayList<>();
+        rideAdapter = new RideAdapter(this, availableRides);
 
-        Intent intent = getIntent();   // this method retrives the intent from previous activity
-        ArrayList<String> availableRides = intent.getStringArrayListExtra("availableRides");
+        // Set the adapter for the ListView
+        RidesListView.setAdapter(rideAdapter);
 
-        if (availableRides != null && !availableRides.isEmpty()) {
-            // Display the rides in the ListView
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                    this, android.R.layout.simple_list_item_1, availableRides);
-            RidesListView.setAdapter(adapter);
+        // Fetch and display the rides
+        fetchRides();
+    }
+
+    public void fetchRides() {
+        // Retrieve the available rides from the Intent
+        Intent intent = getIntent();
+        ArrayList<Ride>  availableRides = (ArrayList<Ride>) intent.getSerializableExtra("availableRides");
+
+        // Check if availableRides is null or empty
+        if (availableRides == null || availableRides.isEmpty()) {
+            Toast.makeText(this, "No available rides found.", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "No rides available.", Toast.LENGTH_SHORT).show();
+            // Notify the adapter that the data has changed
+            Log.d("AvailableRides", "Fetched Rides: " + availableRides.size());
+            rideAdapter.notifyDataSetChanged();
         }
-
-
-
-
     }
 }
+
+
 
 
 
