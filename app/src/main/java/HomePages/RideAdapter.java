@@ -56,9 +56,10 @@ public class RideAdapter extends ArrayAdapter<Ride> {
             toLocation.setText("To: " + currentRide.getToLocation());
             price.setText("Price: " + currentRide.getPrice());
             time.setText("Time: " + currentRide.getTime());
-            Timestamp timestamp = currentRide.getTimestampDate();
-            if (timestamp != null) {
-                Date date = timestamp.toDate();
+            long timestampMillis = currentRide.getTimestampMillis();  // Get the timestamp in milliseconds
+            if (timestampMillis > 0) {
+                // Convert milliseconds to Date
+                Date date = new Date(timestampMillis);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                 String formattedDateStr = sdf.format(date);
                 formatedDate.setText("Date: " + formattedDateStr);
@@ -68,14 +69,14 @@ public class RideAdapter extends ArrayAdapter<Ride> {
         }
 
 
-        // Set up the Book Button
-        bookButton.setOnClickListener(v -> {
-            Intent intent = new Intent(context, PaymentPage.class);
-            context.startActivity(intent);
-        });
+            // Set up the Book Button
+            bookButton.setOnClickListener(v -> {
+                Intent intent = new Intent(context, PaymentPage.class);
+                context.startActivity(intent);
+            });
 
-        return convertView;
+            return convertView;
+        }
     }
-}
 
 

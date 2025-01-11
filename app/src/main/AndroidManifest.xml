@@ -4,6 +4,7 @@
     package="com.example.ridenow">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -16,14 +17,15 @@
         android:theme="@style/Theme.RideNow"
         tools:targetApi="31">
         <activity
+            android:name=".AvailableRides"
+            android:exported="false" />
+        <activity
             android:name="HomePages.PaymentPage"
             android:exported="false" />
         <activity
             android:name="HomePages.ConfirmRidePage"
             android:exported="true" />
-        <activity
-            android:name="HomePages.availablerides"
-            android:exported="true" />
+
         <activity
             android:name="HomePages.CreatingRidePage"
             android:exported="true" />

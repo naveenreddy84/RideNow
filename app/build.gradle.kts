@@ -41,6 +41,11 @@ dependencies {
     implementation("com.google.firebase:firebase-bom:32.0.0")
     implementation ("com.google.android.material:material:1.9.0")
     implementation ("com.google.firebase:firebase-auth:21.6.0")
+    implementation ("com.stripe:stripe-android:20.11.0") // stripe dependency
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")  //retrofit dependency
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")  // Gson converter
+    implementation ("com.google.code.gson:gson:2.8.8")  // Gson library
+
 
 
 
