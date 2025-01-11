@@ -59,8 +59,19 @@ public class CreatingRidePage extends AppCompatActivity {
         // Initialize DatePicker
         initializeDatePicker();
 
+// setting datepicker to current date
+        setDatePickerToCurrentDate();
+
         // Set up upload button
         setupUploadButton();
+    }
+
+
+
+    private void setDatePickerToCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+        long currentDateInMillis = calendar.getTimeInMillis();
+        datepicker.setMinDate(currentDateInMillis);  // Set minimum date to current date
     }
 
     private void initializeComponents() {
@@ -131,6 +142,7 @@ public class CreatingRidePage extends AppCompatActivity {
     }
 
     private void initializeDatePicker() {
+
         datepicker.init(
                 datepicker.getYear(),
                 datepicker.getMonth(),

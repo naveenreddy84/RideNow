@@ -120,8 +120,19 @@ public class CustomerHomeScreen extends AppCompatActivity {
     }
 
     private void performSearch() {
+
+
+
         String fromLocation = snipperfromlocations.getSelectedItem().toString();
         String toLocation = snipperTolocations.getSelectedItem().toString();
+
+
+
+        if (snipperfromlocations == null || snipperTolocations == null || date == null) {
+            Toast.makeText(this, "Please ensure all fields are selected.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
         // Retrieving the date from the DatePicker
         int day = date.getDayOfMonth();
