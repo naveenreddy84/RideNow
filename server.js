@@ -7,7 +7,7 @@ const port = 3000;
 
 app.use(express.json());
 
-app.post('/create-payment-intent', async (req, res) => {
+app.get('/create-payment-intent', async (req, res) => {
     try {
         const paymentIntent = await stripe.paymentIntents.create({
             amount: 1000,  // The amount in cents (e.g., 10 USD)
@@ -20,6 +20,6 @@ app.post('/create-payment-intent', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+app.listen(3000, '0.0.0.0', () => {
+    console.log('Server running on http://0.0.0.0:3000');
 });

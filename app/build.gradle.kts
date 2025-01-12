@@ -44,7 +44,8 @@ dependencies {
     implementation ("com.stripe:stripe-android:20.11.0") // stripe dependency
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")  //retrofit dependency
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")  // Gson converter
-    implementation ("com.google.code.gson:gson:2.8.8")  // Gson library
+    implementation ("com.google.code.gson:gson:2.8.8") // Gson library
+    implementation ("androidx.cardview:cardview:1.0.0")
 
 
 
@@ -60,6 +61,7 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.database)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

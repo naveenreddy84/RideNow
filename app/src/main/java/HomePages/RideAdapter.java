@@ -40,7 +40,7 @@ public class RideAdapter extends ArrayAdapter<Ride> {
         }
 
         // Get current ride
-        Ride currentRide = rides.get(position);
+        final Ride currentRide = rides.get(position);
 
         // Set the ride details
         fromLocation = convertView.findViewById(R.id.fromLocation);
@@ -71,7 +71,36 @@ public class RideAdapter extends ArrayAdapter<Ride> {
 
             // Set up the Book Button
             bookButton.setOnClickListener(v -> {
+
+               // fetching the client secret from the backend
+                String clientSecret = PaymentPage.getClientSecretFromBackend();
+
+                // Get the current ride details to pass to the PaymentPage
+
+                String fromLocationText = currentRide.getFromLocation();
+                String toLocationText = currentRide.getToLocation();
+                String priceText = currentRide.getPrice();
+                String time = currentRide.getTime();
+                long timestampMillis = currentRide.getTimestampMillis();  // Get the timestamp in milliseconds
+                        if (timestampMillis > 0) {
+                            // Convert milliseconds to Date
+                            Date date = new Date(timestampMillis);
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                            String formattedDateStr = sdf.format(date);
+                            formatedDate.setText("Date: " + formattedDateStr);
+                        } else {
+                            formatedDate.setText("Date not available");
+                        }
+
+               //passing clientsecret and current ridedetails
+
                 Intent intent = new Intent(context, PaymentPage.class);
+                intent.putExtra("clientSecret", clientSecret);
+                intent.putExtra("fromLocation",fromLocationText);
+                intent.putExtra("toLocation",toLocationText);
+                intent.putExtra("price",priceText);
+                intent.putExtra("time",time);
+                intent.putExtra("date",formatedDate.getText().toString());
                 context.startActivity(intent);
             });
 
