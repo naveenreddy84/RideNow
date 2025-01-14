@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.ridenow.AvailableRides;
 import com.example.ridenow.R;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="Drivers.DriverProfilePage">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ProfilePage"
+        android:textSize="35sp"
+        android:textAlignment="center"
+        android:background="@color/Blue"
+        />
+
+
+    <LinearLayout
+
+        android:id="@+id/Box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@color/white"
+        android:layout_margin="12dp"
+        android:elevation="4dp"
+        android:clipToPadding="false"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/customername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="35sp"
+            />
+
+        <Button
+            android:id="@+id/customerRides"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your Rides"
+            android:layout_marginBottom="10dp"
+            />
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

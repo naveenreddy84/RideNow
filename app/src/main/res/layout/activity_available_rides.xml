@@ -9,7 +9,7 @@
     android:padding="20dp"
     android:gravity="center"
     android:background="@drawable/car"
-    tools:context=".AvailableRides">
+    tools:context="Customers.AvailableRides">
 
     <LinearLayout
         android:id="@+id/Box"

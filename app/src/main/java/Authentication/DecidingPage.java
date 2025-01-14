@@ -8,7 +8,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ridenow.R;
 
-import Drivers.CustomerRegister;
+import Customers.CustomerRegister;
 import Drivers.DriverRegisterPage;
 
 public class DecidingPage extends AppCompatActivity {

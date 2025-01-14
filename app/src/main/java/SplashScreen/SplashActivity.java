@@ -1,4 +1,4 @@
-package com.example.ridenow;
+package SplashScreen;
 
 
 
