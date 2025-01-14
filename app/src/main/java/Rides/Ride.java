@@ -1,4 +1,4 @@
-package HomePages;
+package Rides;
 
 import java.io.Serializable;
 

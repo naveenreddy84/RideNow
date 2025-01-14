@@ -1,4 +1,4 @@
-package HomePages;
+package Rides;
 
 
 import android.content.Context;
@@ -11,12 +11,13 @@ import android.widget.TextView;
 import android.content.Intent;
 
 import com.example.ridenow.R;
-import com.google.firebase.Timestamp;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import Payments.PaymentPage;
 
 public class RideAdapter extends ArrayAdapter<Ride> {
 

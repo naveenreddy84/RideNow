@@ -15,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.ridenow.R;
 import com.google.firebase.auth.FirebaseAuth;
 
-import HomePages.CustomerHomeScreen;
-
 public class ForgotPassword extends AppCompatActivity {
 
     EditText inputEmail;

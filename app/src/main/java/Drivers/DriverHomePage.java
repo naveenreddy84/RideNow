@@ -1,4 +1,4 @@
-package HomePages;
+package Drivers;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +15,6 @@ import com.example.ridenow.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 
 
 public class DriverHomePage extends AppCompatActivity {
@@ -91,7 +90,7 @@ public class DriverHomePage extends AppCompatActivity {
         create_a_rideBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DriverHomePage.this,CreatingRidePage.class);
+                Intent intent = new Intent(DriverHomePage.this, CreatingRidePage.class);
                 startActivity(intent);
 
             }

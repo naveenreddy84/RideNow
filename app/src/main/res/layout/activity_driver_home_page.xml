@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:layout_gravity="center"
     android:background="@drawable/car"
-    tools:context="HomePages.DriverHomePage">
+    tools:context="Drivers.DriverHomePage">
 
     <TextView
         android:id="@+id/welcomemsg"

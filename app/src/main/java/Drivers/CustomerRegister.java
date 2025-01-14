@@ -1,4 +1,4 @@
-package Authentication;
+package Drivers;
 
 
 import android.content.Intent;
@@ -18,6 +18,9 @@ import com.example.ridenow.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import Customers.Customers;
+import Authentication.LoginActivity;
 
 public class CustomerRegister extends AppCompatActivity {
     EditText registerEmail, registerPassword, confirmPassword,Customerusername;

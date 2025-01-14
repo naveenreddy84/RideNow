@@ -9,7 +9,7 @@
     android:background="@drawable/car"
     android:layout_gravity="center"
     android:orientation="vertical"
-    tools:context="HomePages.ConfirmRidePage">
+    tools:context="Drivers.ConfirmRidePage">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/rideDetailsCard"

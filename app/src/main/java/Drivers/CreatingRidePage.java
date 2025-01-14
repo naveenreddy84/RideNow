@@ -1,4 +1,4 @@
-package HomePages;
+package Drivers;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,17 +16,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ridenow.R;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class CreatingRidePage extends AppCompatActivity {

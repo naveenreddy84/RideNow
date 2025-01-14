@@ -12,8 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import HomePages.CustomerHomeScreen;
-import HomePages.DriverHomePage;
+import Customers.CustomerHomeScreen;
+import Drivers.DriverHomePage;
 
 import com.example.ridenow.R;
 import com.google.firebase.auth.FirebaseAuth;

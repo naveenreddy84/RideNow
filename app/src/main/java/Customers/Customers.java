@@ -1,4 +1,4 @@
-package Authentication;
+package Customers;
 
 public class Customers {
 

@@ -10,7 +10,7 @@
     android:background="@drawable/car"
 
     android:gravity="center"
-    tools:context="HomePages.CustomerHomeScreen">
+    tools:context="Customers.CustomerHomeScreen">
 
 <LinearLayout
 
