@@ -2,7 +2,9 @@ package HomePages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -11,7 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;  // Changed from AppCompatActivity to Fragment for navbar
 
 import com.example.ridenow.AvailableRides;
 import com.example.ridenow.R;
@@ -21,14 +23,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class CustomerHomeScreen extends AppCompatActivity {
+public class CustomerHomeScreen extends Fragment {  // Changed from AppCompatActivity to Fragment
 
     TextView title, fromAddresstitle, ToAddresstitle;
     Spinner snipperfromlocations, snipperTolocations;
@@ -43,38 +44,37 @@ public class CustomerHomeScreen extends AppCompatActivity {
     private Calendar calendar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customer_home_screen);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.activity_customer_home_screen, container, false);
 
-
-        initializeUI();
+        initializeUI(view);
         FromAdapter();
         ToAdapter();
         setupDatePicker();
         setDatePickerToCurrentDate();
 
         performSearch();
+
+        return view;  // Return the inflated view
     }
 
-    private void initializeUI() {
+    private void initializeUI(View view) {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         // Initialize UI elements
-        title = findViewById(R.id.title);
-        fromAddresstitle = findViewById(R.id.fromAddresstitle);
-        ToAddresstitle = findViewById(R.id.ToAddresstitle);
-        snipperfromlocations = findViewById(R.id.snipperfromlocations);
-        snipperTolocations = findViewById(R.id.snipperTolocations);
-        date = findViewById(R.id.date);
-        searchBtn = findViewById(R.id.searchBtn);
+        title = view.findViewById(R.id.title);
+        fromAddresstitle = view.findViewById(R.id.fromAddresstitle);
+        ToAddresstitle = view.findViewById(R.id.ToAddresstitle);
+        snipperfromlocations = view.findViewById(R.id.snipperfromlocations);
+        snipperTolocations = view.findViewById(R.id.snipperTolocations);
+        date = view.findViewById(R.id.date);
+        searchBtn = view.findViewById(R.id.searchBtn);
 
         locationsArray = getResources().getStringArray(R.array.locations_array);
         filteredLocations = new ArrayList<>(Arrays.asList(locationsArray));
-
     }
-
 
     private void setDatePickerToCurrentDate() {
         Calendar calendar = Calendar.getInstance();
@@ -84,7 +84,7 @@ public class CustomerHomeScreen extends AppCompatActivity {
 
     private void FromAdapter() {
         ArrayAdapter<String> fromAdapter = new ArrayAdapter<>(
-                this,
+                getActivity(),  // Use getActivity() instead of 'this'
                 android.R.layout.simple_spinner_item,
                 locationsArray
         );
@@ -104,14 +104,14 @@ public class CustomerHomeScreen extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(CustomerHomeScreen.this, "No location selected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "No location selected", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void ToAdapter() {
         ArrayAdapter<String> toAdapter = new ArrayAdapter<>(
-                this,
+                getActivity(),  // Use getActivity() instead of 'this'
                 android.R.layout.simple_spinner_item,
                 filteredLocations
         );
@@ -126,9 +126,6 @@ public class CustomerHomeScreen extends AppCompatActivity {
                         calendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0));
     }
 
-    // Method to perform the search and query Firestore
-
-
     private void performSearch() {
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,17 +135,16 @@ public class CustomerHomeScreen extends AppCompatActivity {
                 long selectedDateMillis = calendar.getTimeInMillis();
 
                 if (fromLocation.isEmpty() || toLocation.isEmpty()) {
-                    Toast.makeText(CustomerHomeScreen.this, "Please select valid locations.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please select valid locations.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Create a Date object from the selected milliseconds
                 Date selectedDate = new Date(selectedDateMillis);
 
                 db.collection("rides")
                         .whereEqualTo("fromLocation", fromLocation)
                         .whereEqualTo("toLocation", toLocation)
-                        .whereGreaterThanOrEqualTo("Timestamp", new Timestamp(selectedDate)) // Use Timestamp(Date)
+                        .whereGreaterThanOrEqualTo("Timestamp", new Timestamp(selectedDate))
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful() && task.getResult() != null) {
@@ -167,18 +163,18 @@ public class CustomerHomeScreen extends AppCompatActivity {
                                 }
 
                                 if (availableRides.isEmpty()) {
-                                    Toast.makeText(CustomerHomeScreen.this, "No rides available.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "No rides available.", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Intent intent = new Intent(CustomerHomeScreen.this, AvailableRides.class);
+                                    Intent intent = new Intent(getActivity(), AvailableRides.class);
                                     intent.putExtra("availableRides", availableRides);
                                     startActivity(intent);
                                 }
                             } else {
-                                Toast.makeText(CustomerHomeScreen.this, "Error fetching rides.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Error fetching rides.", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .addOnFailureListener(e ->
-                                Toast.makeText(CustomerHomeScreen.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                                Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         });
     }

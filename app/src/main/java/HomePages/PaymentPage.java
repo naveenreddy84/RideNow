@@ -20,6 +20,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.json.JSONObject;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -51,52 +54,57 @@ public class PaymentPage extends AppCompatActivity {
         });
     }
 
-    // Fetch client secret using ExecutorService (instead of AsyncTask)
     private void fetchClientSecretFromBackend() {
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                // Fetch the client secret from backend
-                final String clientSecret = getClientSecretFromBackend();
+        executorService.execute(() -> {
+            // Fetch the client secret from backend
+            final String clientSecret = getClientSecretFromBackend();
 
-                // After fetching client secret, run this on the main thread to update UI
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (clientSecret != null) {
-                            confirmPayment(clientSecret);
-                        } else {
-                            Toast.makeText(PaymentPage.this, "Failed to fetch client secret", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
+            // Update UI on the main thread
+            runOnUiThread(() -> {
+                if (clientSecret != null) {
+                    confirmPayment(clientSecret);
+                } else {
+                    Toast.makeText(PaymentPage.this, "Failed to fetch client secret", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 
-    // method to get the client secret from backend
+    // Method to fetch the client secret from backend
     public static String getClientSecretFromBackend() {
         try {
             OkHttpClient client = new OkHttpClient();
+
+            // JSON body with the amount
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("amount", 1000); // Amount in cents (e.g., $10.00 CAD)
+
+            RequestBody body = RequestBody.create(
+
+                    MediaType.parse("application/json; charset=utf-8"),
+                    jsonBody.toString()
+            );
+
             Request request = new Request.Builder()
-                    .url("http://10.0.2.2:3000/create-payment-intent") // Use your backend URL (without the dot)
+                    .url("http://10.0.2.2:3000/create-payment-intent") // Backend URL
+                    .post(body) // Use POST method
                     .build();
 
             // Execute the request and fetch the response
             Response response = client.newCall(request).execute();
             if (response.isSuccessful() && response.body() != null) {
                 String responseBody = response.body().string();
-                // Parse the JSON response to extract the clientSecret
                 JSONObject jsonResponse = new JSONObject(responseBody);
-                return jsonResponse.getString("clientSecret"); // Return the clientSecret from JSON
+                return jsonResponse.getString("clientSecret"); // Extract clientSecret
             } else {
                 Log.e("Stripe", "Failed to fetch client secret: " + response.message());
             }
         } catch (Exception e) {
             Log.e("Stripe", "Error fetching client secret: " + e.getMessage());
         }
-        return null; // Return null if fetching the clientSecret fails
+        return null; // Return null on failure
     }
+
 
     // confirming the payment using fetched client secret
     private void confirmPayment(String clientSecret) {
