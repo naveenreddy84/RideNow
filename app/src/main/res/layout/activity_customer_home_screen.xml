@@ -1,109 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.widget.ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/car"
-
-    android:gravity="center"
-    tools:context="Customers.CustomerHomeScreen">
-
-<LinearLayout
-
-    android:id="@+id/Box"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/white"
-    android:layout_margin="12dp"
-    android:elevation="4dp"
-    android:clipToPadding="false"
-    android:gravity="center"
+    tools:context=".CustomerHomeScreen">
 
-    >
-
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="24dp"
-        android:gravity="center"
-        android:paddingBottom="1dp"
-        android:layout_margin="6dp"
-        android:text="@string/search_for_rides"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/fromAddresstitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="From Address"
-        android:textSize="16sp"
-        android:backgroundTint="@color/white"
-        android:textColor="@color/black"
-        android:gravity="end"
-        android:layout_marginBottom="2dp" />
-
-    <Spinner
-        android:id="@+id/snipperfromlocations"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:textColorHint="@color/white"
-        android:spinnerMode="dropdown"
-        android:layout_marginBottom="6dp"
-        />
-
-    <TextView
-        android:id="@+id/ToAddresstitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="To Address"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:layout_marginBottom="2dp" />
-
-
-    <Spinner
-        android:id="@+id/snipperTolocations"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:spinnerMode="dropdown"
-        android:scrollbarStyle="insideInset"
-        android:layout_marginBottom="6dp"
-
-        />
-
-    <DatePicker
-        android:id="@+id/date"
-        android:layout_width="300dp"
-        android:layout_height="350dp"
-        android:layout_marginBottom="12dp"
-        />
-
-    <Button
-        android:id="@+id/searchBtn"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Search"
-        android:backgroundTint="#03A9F4"
-        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:gravity="center">
 
-        />
+        <!-- Title: Search for Rides -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="@string/search_for_rides"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
+        <!-- From Address Text and Spinner -->
+        <TextView
+            android:id="@+id/fromAddresstitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="From Address"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:gravity="start"
+            android:layout_marginBottom="2dp" />
 
+        <Spinner
+            android:id="@+id/snipperfromlocations"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:spinnerMode="dropdown"
+            android:layout_marginBottom="10dp" />
 
+        <!-- To Address Text and Spinner -->
+        <TextView
+            android:id="@+id/ToAddresstitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="To Address"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:gravity="start"
+            android:layout_marginBottom="2dp" />
 
+        <Spinner
+            android:id="@+id/snipperTolocations"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:spinnerMode="dropdown"
+            android:layout_marginBottom="10dp" />
 
+        <!-- Map Fragment -->
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="10dp" />
 
-</LinearLayout>
+        <!-- DatePicker -->
+        <DatePicker
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="16dp" />
 
-</LinearLayout>
+        <!-- Search Button -->
+        <Button
+            android:id="@+id/searchBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:backgroundTint="#03A9F4"
+            android:layout_marginBottom="10dp" />
+
+    </LinearLayout>
+</android.widget.ScrollView>

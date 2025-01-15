@@ -14,8 +14,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ridenow.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -27,19 +30,20 @@ import java.util.List;
 
 import Rides.Ride;
 
-public class CustomerHomeScreen extends AppCompatActivity {
+public class CustomerHomeScreen extends AppCompatActivity implements OnMapReadyCallback {
 
-    TextView title, fromAddresstitle, ToAddresstitle;
-    Spinner snipperfromlocations, snipperTolocations;
+    private TextView title;
+    private Spinner snipperfromlocations, snipperTolocations;
     private DatePicker date;
-    Button searchBtn;
-    FirebaseAuth mAuth;
-    FirebaseFirestore db;
+    private Button searchBtn;
+    private FirebaseFirestore db;
 
-    String[] locationsArray;
-    List<String> filteredLocations;
+    private String[] locationsArray;
+    private List<String> filteredLocations;
 
     private Calendar calendar;
+
+    private GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,37 +57,35 @@ public class CustomerHomeScreen extends AppCompatActivity {
         setDatePickerToCurrentDate();
 
         performSearch();
+
+        // Initialize UI components and map
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
     }
 
+    // Initialize UI elements
     private void initializeUI() {
-        mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-
-        // Initialize UI elements
         title = findViewById(R.id.title);
-        fromAddresstitle = findViewById(R.id.fromAddresstitle);
-        ToAddresstitle = findViewById(R.id.ToAddresstitle);
         snipperfromlocations = findViewById(R.id.snipperfromlocations);
         snipperTolocations = findViewById(R.id.snipperTolocations);
         date = findViewById(R.id.date);
         searchBtn = findViewById(R.id.searchBtn);
-
         locationsArray = getResources().getStringArray(R.array.locations_array);
         filteredLocations = new ArrayList<>(Arrays.asList(locationsArray));
     }
 
+    // Set the DatePicker to current date
     private void setDatePickerToCurrentDate() {
-        Calendar calendar = Calendar.getInstance();
-        long currentDateInMillis = calendar.getTimeInMillis();
-        date.setMinDate(currentDateInMillis);  // Disable past dates
+       Calendar  calendar = Calendar.getInstance();
+        date.setMinDate(calendar.getTimeInMillis());
     }
 
+    // Adapter for "from" locations
     private void FromAdapter() {
-        ArrayAdapter<String> fromAdapter = new ArrayAdapter<>(
-                this,  // Use 'this' since we're in an Activity
-                android.R.layout.simple_spinner_item,
-                locationsArray
-        );
+        ArrayAdapter<String> fromAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locationsArray);
         fromAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         snipperfromlocations.setAdapter(fromAdapter);
 
@@ -105,23 +107,23 @@ public class CustomerHomeScreen extends AppCompatActivity {
         });
     }
 
+    // Adapter for "to" locations
     private void ToAdapter() {
-        ArrayAdapter<String> toAdapter = new ArrayAdapter<>(
-                this,  // Use 'this' instead of 'getActivity()'
-                android.R.layout.simple_spinner_item,
-                filteredLocations
-        );
+        ArrayAdapter<String> toAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filteredLocations);
         toAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         snipperTolocations.setAdapter(toAdapter);
     }
 
+    // Setup DatePicker listener
     private void setupDatePicker() {
-        calendar = Calendar.getInstance();
+
+        Calendar calendar = Calendar.getInstance();
+
         date.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
-                (view, year, monthOfYear, dayOfMonth) ->
-                        calendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0));
+                (view, year, monthOfYear, dayOfMonth) -> calendar.set(year, monthOfYear, dayOfMonth, 0, 0, 0));
     }
 
+    // Perform search based on user input
     private void performSearch() {
         searchBtn.setOnClickListener(v -> {
             String fromLocation = snipperfromlocations.getSelectedItem().toString().trim();
@@ -133,8 +135,8 @@ public class CustomerHomeScreen extends AppCompatActivity {
                 return;
             }
 
+            // Query Firebase to find available rides
             Date selectedDate = new Date(selectedDateMillis);
-
             db.collection("rides")
                     .whereEqualTo("fromLocation", fromLocation)
                     .whereEqualTo("toLocation", toLocation)
@@ -144,16 +146,16 @@ public class CustomerHomeScreen extends AppCompatActivity {
                         if (task.isSuccessful() && task.getResult() != null) {
                             ArrayList<Ride> availableRides = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                long timestampMillis = document.getTimestamp("Timestamp").toDate().getTime();
                                 Ride ride = new Ride(
                                         document.getId(),
                                         document.getString("fromLocation"),
                                         document.getString("toLocation"),
                                         document.getString("time"),
                                         document.getString("price"),
-                                        timestampMillis
-                                );
-                                availableRides.add(ride);
+                                        (document.getTimestamp("Timestamp") != null)
+                                                ? document.getTimestamp("Timestamp").toDate().getTime()
+                                                : 0);
+                                        availableRides.add(ride);
                             }
 
                             if (availableRides.isEmpty()) {
@@ -167,8 +169,19 @@ public class CustomerHomeScreen extends AppCompatActivity {
                             Toast.makeText(CustomerHomeScreen.this, "Error fetching rides.", Toast.LENGTH_SHORT).show();
                         }
                     })
-                    .addOnFailureListener(e ->
-                            Toast.makeText(CustomerHomeScreen.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    .addOnFailureListener(e -> Toast.makeText(CustomerHomeScreen.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         });
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.map = googleMap;
+
+        // Get the selected locations
+        String fromLocation = snipperfromlocations.getSelectedItem().toString().trim();
+        String toLocation = snipperTolocations.getSelectedItem().toString().trim();
+
+        // Use MapHelper to set up the map
+        MapHelper.setupMap(map, fromLocation, toLocation, this);
     }
 }

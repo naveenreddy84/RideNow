@@ -21,6 +21,7 @@ android {
 
     buildTypes {
         release {
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -46,6 +47,10 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")  // Gson converter
     implementation ("com.google.code.gson:gson:2.8.8") // Gson library
     implementation ("androidx.cardview:cardview:1.0.0")
+    implementation("com.google.android.gms:play-services-maps:17.0.0")
+    implementation ("com.google.android.gms:play-services-location:17.0.0")
+    implementation ("com.google.android.gms:play-services-maps:17.0.0")
+    implementation ("com.google.maps:google-maps-services:0.15.0")
 
 
 
