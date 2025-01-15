@@ -82,6 +82,20 @@
 
 
 
+    <Button
+        android:id="@+id/ProfileBtn"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:text="View Profile"
+        android:backgroundTint="#03A9F4"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+
+        />
+
+
+
+
 
 
 </LinearLayout>
