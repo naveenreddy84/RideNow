@@ -1,26 +1,34 @@
 package Drivers;
 
-
 public class Drivers {
 
     private String email;
     private String cPassword;
     private String pswd;
-
     private String driverusername;
     private String driverphonenumber;
+    private String driverId;  // New field to store driver ID (UID)
 
-
-    public Drivers(String email, String cPassword, String pswd, String driverusername, String driverphonenumber) {
+    // Constructor with driverId
+    public Drivers(String email, String cPassword, String pswd, String driverusername, String driverphonenumber, String driverId) {
         this.email = email;
         this.cPassword = cPassword;
         this.pswd = pswd;
         this.driverusername = driverusername;
         this.driverphonenumber = driverphonenumber;
-
-
+        this.driverId = driverId;
     }
 
+    // Getter and setter for driverId
+    public String getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(String driverId) {
+        this.driverId = driverId;
+    }
+
+    // Existing getters and setters for other fields
     public String getDriverphonenumber() {
         return driverphonenumber;
     }
@@ -30,7 +38,6 @@ public class Drivers {
     }
 
     public String getDriverusername() {
-
         return driverusername;
     }
 
@@ -62,6 +69,7 @@ public class Drivers {
         this.email = email;
     }
 }
+
 
 
 

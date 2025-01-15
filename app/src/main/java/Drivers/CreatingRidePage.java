@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ridenow.R;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -181,13 +182,17 @@ public class CreatingRidePage extends AppCompatActivity {
                         !timeInput.isEmpty() &&
                         formatedDateTimestamp != null) {
 
-                    //  saving the data  to Firestore
+                    // Get the current driver's user ID (assuming the user is logged in)
+                    String driverId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                    //  Saving the data to Firestore
                     Map<String, Object> rideData = new HashMap<>();
                     rideData.put("fromLocation", fromLocation);
                     rideData.put("toLocation", toLocation);
                     rideData.put("Timestamp", formatedDateTimestamp);
                     rideData.put("price", priceInput);
                     rideData.put("time", timeInput);
+                    rideData.put("driverId", driverId);  // Add the driverId to the ride data
 
                     // Save the data to Firestore
                     db.collection("rides")
@@ -207,6 +212,7 @@ public class CreatingRidePage extends AppCompatActivity {
             }
         });
     }
+
 }
 
 

@@ -36,13 +36,13 @@ public class ConfirmRidePage extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_confirm_ride_page);
 
-        // Initialize views
+
         initializeViews();
 
-        // Set up Profile button click listener
+
         setupProfileButton();
 
-        // Retrieve and display ride details
+
         displayRideDetails();
     }
 
@@ -53,7 +53,7 @@ public class ConfirmRidePage extends AppCompatActivity {
         rideToLocation = findViewById(R.id.rideToLocation);
         ridePrice = findViewById(R.id.ridePrice);
         time = findViewById(R.id.time);
-        ProfileBtn = findViewById(R.id.ProfileBtn);  // Ensure this is the correct ID
+        ProfileBtn = findViewById(R.id.ProfileBtn);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -71,11 +71,11 @@ public class ConfirmRidePage extends AppCompatActivity {
     }
 
     private void displayRideDetails() {
-        // Retrieve the rideId passed from the previous activity
+        // Retrieving  the rideId passed from the previous activity
         String rideId = getIntent().getStringExtra("rideId");
 
         if (rideId != null) {
-            // Retrieve the ride details from Firestore
+
             db.collection("rides").document(rideId)
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {

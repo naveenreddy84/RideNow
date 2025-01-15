@@ -53,24 +53,6 @@ TextView drivername;
         db = FirebaseFirestore.getInstance();
 
 
-        FirebaseUser  currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if(currentUser != null){
-
-            String userId = currentUser.getUid();
-
-
-            db.collection("Drivers").document(userId).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful() && task.getResult().exists()){
-
-
-                    String Drivername = task.getResult().getString("driverusername");
-
-                    drivername.setText(Drivername);
-                    Log.d("UserInfo", "Driver Name: " + Drivername);
-                }
-            });
-        }
 
 
        driverRides.setOnClickListener(new View.OnClickListener() {

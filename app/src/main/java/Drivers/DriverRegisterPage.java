@@ -73,79 +73,80 @@ public class DriverRegisterPage extends AppCompatActivity {
     }
 
 
-        private void registerDriver () {
-            String email = registerEmail.getText().toString().trim();
-            String cPassword = confirmPassword.getText().toString().trim();
-            String pswd = registerPassword.getText().toString().trim();
-            String  uname  =  driverusername.getText().toString().trim();
-            String phonenumber =  driverphonenumber.getText().toString().trim();
+    private void registerDriver() {
+        String email = registerEmail.getText().toString().trim();
+        String cPassword = confirmPassword.getText().toString().trim();
+        String pswd = registerPassword.getText().toString().trim();
+        String uname = driverusername.getText().toString().trim();
+        String phonenumber = driverphonenumber.getText().toString().trim();
 
-
-            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pswd) || TextUtils.isEmpty(cPassword)) {
-                Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                registerEmail.setError("Invalid Email ");
-                registerEmail.requestFocus();
-                return;
-            }
-
-            if (pswd.length() < 8) {
-                registerPassword.setError("Password must be atleast 8 characters");
-                registerPassword.requestFocus();
-                return;
-            }
-
-            if (!pswd.equals(cPassword)) {
-                confirmPassword.setError("Passwords do not match");
-                confirmPassword.requestFocus();
-                return;
-            }
-            if(TextUtils.isEmpty(uname) || TextUtils.isEmpty(phonenumber)){
-                Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-
-
-            mAuth.createUserWithEmailAndPassword(email, pswd).addOnCompleteListener(this, task -> {
-
-                if (task.isSuccessful()) {
-
-                    FirebaseUser user = mAuth.getCurrentUser();
-
-                    if(user != null){
-                        user.sendEmailVerification().addOnCompleteListener( emailTask -> {
-                            if(emailTask.isSuccessful()){
-                                Toast.makeText(this, "Registration Successful.please verify your email", Toast.LENGTH_SHORT).show();
-                                Drivers Driver = new Drivers(email, cPassword, pswd,uname,phonenumber);
-                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                db.collection("Drivers").add(Driver);
-
-                                Intent intent = new Intent(DriverRegisterPage.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }else {
-                                Toast.makeText(this,"failed to verify Email",Toast.LENGTH_SHORT).show();
-                            }
-
-
-                        });
-                    }
-
-
-                } else {
-                    Toast.makeText(this, "Registration Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-
-                }
-
-            });
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pswd) || TextUtils.isEmpty(cPassword)) {
+            Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
+            return;
         }
 
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            registerEmail.setError("Invalid Email ");
+            registerEmail.requestFocus();
+            return;
+        }
 
-            @Override
+        if (pswd.length() < 8) {
+            registerPassword.setError("Password must be atleast 8 characters");
+            registerPassword.requestFocus();
+            return;
+        }
+
+        if (!pswd.equals(cPassword)) {
+            confirmPassword.setError("Passwords do not match");
+            confirmPassword.requestFocus();
+            return;
+        }
+        if (TextUtils.isEmpty(uname) || TextUtils.isEmpty(phonenumber)) {
+            Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mAuth.createUserWithEmailAndPassword(email, pswd).addOnCompleteListener(this, task -> {
+
+            if (task.isSuccessful()) {
+
+                FirebaseUser user = mAuth.getCurrentUser();
+
+                if (user != null) {
+                    String userId = user.getUid();  // Get the UID (driverId)
+
+                    // Send email verification
+                    user.sendEmailVerification().addOnCompleteListener(emailTask -> {
+                        if (emailTask.isSuccessful()) {
+                            Toast.makeText(this, "Registration Successful. Please verify your email", Toast.LENGTH_SHORT).show();
+
+
+                            Drivers driver = new Drivers(email, cPassword, pswd, uname, phonenumber, userId);
+
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("Drivers").add(driver)
+                                    .addOnSuccessListener(documentReference -> {
+                                        Intent intent = new Intent(DriverRegisterPage.this, LoginActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(this, "Failed to register driver: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+
+                        } else {
+                            Toast.makeText(this, "Failed to verify email", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+            } else {
+                Toast.makeText(this, "Registration Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    @Override
             protected void onStart () {
                 super.onStart();
             }
