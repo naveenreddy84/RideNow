@@ -2,20 +2,19 @@ package Payments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.ridenow.R;
+
+import Customers.CustomerHomeScreen;
 
 public class PaymentSuccessPage extends AppCompatActivity {
 
-
-    TextView ridedetailstitle, fromLocationView, toLocationView, priceView, time, formatedDateView, paymentStatusMessage;
-
-
-
+    TextView ridedetailstitle, fromLocationView, toLocationView, priceView, timeView, formatedDateView, paymentStatusMessage;
+    Button Homebtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,48 +22,21 @@ public class PaymentSuccessPage extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_payment_success_page);
 
-       // initiliaze views
+        // Initialize views
         ridedetailstitle = findViewById(R.id.ridedetailstitle);
-        paymentStatusMessage = findViewById(R.id.paymentStatusMessage);
-        TextView fromLocationView = findViewById(R.id.fromLocationView);
-        TextView toLocationView = findViewById(R.id.toLocationView);
-        TextView priceView = findViewById(R.id.priceView);
-        TextView timeView = findViewById(R.id.timeView);
-        TextView dateView = findViewById(R.id.formatedDateView);
+        Homebtn = findViewById(R.id.Homebtn);
 
 
-         // get data from the intent
+        Homebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PaymentSuccessPage.this, CustomerHomeScreen.class);
+                startActivity(intent);
+            }
+        });
 
 
-        Intent intent = getIntent();
-        String fromLocation = intent.getStringExtra("fromLocation");
-        String toLocation = intent.getStringExtra("toLocation");
-        String price = intent.getStringExtra("price");
-        String time = intent.getStringExtra("time");
-        String date = intent.getStringExtra("date");
-
-
-
-
-
-        fromLocationView.setText("From: " + fromLocation);
-        toLocationView.setText("To: " + toLocation);
-        priceView.setText("Price: " + price);
-        timeView.setText("Time: " + time);
-        dateView.setText("Date: " + date);
         paymentStatusMessage.setText("Payment Status: Successful");
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }

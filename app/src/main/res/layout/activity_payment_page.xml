@@ -6,7 +6,7 @@
     android:padding="16dp"
     android:gravity="center_horizontal">
 
-
+    <!-- Title Text -->
     <TextView
         android:id="@+id/paymentPageTitle"
         android:layout_width="wrap_content"
@@ -16,21 +16,74 @@
         android:layout_marginTop="32dp"
         android:gravity="center" />
 
+    <!-- Display From Location -->
+    <TextView
+        android:id="@+id/fromLocationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="From: "
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        android:gravity="center" />
 
+    <!-- Display To Location -->
+    <TextView
+        android:id="@+id/toLocationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="To: "
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:gravity="center" />
+
+    <!-- Display Time -->
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time: "
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:gravity="center" />
+
+    <!-- Display Date -->
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date: "
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:gravity="center" />
+
+    <!-- Display Amount to be Paid -->
+    <TextView
+        android:id="@+id/paymentAmountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Amount: $0.00"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        android:gravity="center" />
+
+    <!-- Payment Button -->
     <Button
         android:id="@+id/paymentButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pay Now"
-        android:layout_marginTop="32dp" />
+        android:textSize="18sp"
+        android:layout_marginTop="24dp"
+        android:gravity="center" />
 
-
+    <!-- Status Message (Optional) -->
     <TextView
         android:id="@+id/paymentStatusMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Payment Status: Pending"
         android:textSize="18sp"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal" />
 
 </LinearLayout>

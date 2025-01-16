@@ -74,7 +74,7 @@ public class RideAdapter extends ArrayAdapter<Ride> {
             bookButton.setOnClickListener(v -> {
 
                // fetching the client secret from the backend
-                String clientSecret = PaymentPage.getClientSecretFromBackend();
+
 
                 // Get the current ride details to pass to the PaymentPage
 
@@ -82,27 +82,26 @@ public class RideAdapter extends ArrayAdapter<Ride> {
                 String toLocationText = currentRide.getToLocation();
                 String priceText = currentRide.getPrice();
                 String time = currentRide.getTime();
-                long timestampMillis = currentRide.getTimestampMillis();  // Get the timestamp in milliseconds
-                        if (timestampMillis > 0) {
-                            // Convert milliseconds to Date
-                            Date date = new Date(timestampMillis);
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                            String formattedDateStr = sdf.format(date);
-                            formatedDate.setText("Date: " + formattedDateStr);
-                        } else {
-                            formatedDate.setText("Date not available");
-                        }
+                long timestampMillis = currentRide.getTimestampMillis();
+                // Pass the formatted date directly
+                String formattedDateStr = "";
+                if (timestampMillis > 0) {
+                    Date date = new Date(timestampMillis);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    formattedDateStr = sdf.format(date);
+                } else {
+                    formattedDateStr = "Date not available";
+                }
 
-               //passing clientsecret and current ridedetails
-
+// Passing current ride details
                 Intent intent = new Intent(context, PaymentPage.class);
-                intent.putExtra("clientSecret", clientSecret);
-                intent.putExtra("fromLocation",fromLocationText);
-                intent.putExtra("toLocation",toLocationText);
-                intent.putExtra("price",priceText);
-                intent.putExtra("time",time);
-                intent.putExtra("date",formatedDate.getText().toString());
+                intent.putExtra("fromLocation", fromLocationText);
+                intent.putExtra("toLocation", toLocationText);
+                intent.putExtra("price", priceText);
+                intent.putExtra("time", time);
+                intent.putExtra("date", formattedDateStr); // Use formattedDateStr instead of formatedDate.getText().toString()
                 context.startActivity(intent);
+
             });
 
             return convertView;

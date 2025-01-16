@@ -105,12 +105,16 @@ public class CustomerRegister extends AppCompatActivity {
 
                 FirebaseUser user = mAuth.getCurrentUser();
 
-                if(user != null){
+
+
+
+                    if(user != null){
                     user.sendEmailVerification().addOnCompleteListener(emailTask ->{
                                 if(emailTask.isSuccessful()){
+                                    String userid = user.getUid();
                                     Toast.makeText(this, "Registration Successful.please verify your Email", Toast.LENGTH_SHORT).show();
 
-                                    Customers customer = new Customers(email, cPassword, pswd,uname);
+                                    Customers customer = new Customers(email, cPassword, pswd,uname,userid);
                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                                     db.collection("Customers").add(customer);
 

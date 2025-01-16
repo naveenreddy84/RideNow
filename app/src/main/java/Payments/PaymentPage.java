@@ -2,7 +2,6 @@ package Payments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -10,165 +9,170 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ridenow.R;
-import com.stripe.android.ApiResultCallback;
-import com.stripe.android.PaymentIntentResult;
-import com.stripe.android.Stripe;
-import com.stripe.android.model.ConfirmPaymentIntentParams;
-import com.stripe.android.model.PaymentIntent;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.stripe.android.PaymentConfiguration;
+import com.stripe.android.paymentsheet.PaymentSheet;
+import com.stripe.android.paymentsheet.PaymentSheetResult;
 
 import org.json.JSONObject;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class PaymentPage extends AppCompatActivity {
 
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();  // Create a single thread executor
-    private Stripe stripe;
-    Button paymentButton;
-    TextView paymentStatusMessage;
+    private TextView paymentAmountText;
+    private Button paymentButton;
+    private PaymentSheet paymentSheet;
+    private String clientSecret;
+
+    // Assume price is passed as a String from the previous activity
+    private String price;
+
+    // Variables to hold the passed ride details
+    private String fromLocation, toLocation, time, formattedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_page);
 
-        // Initialize views
+        // Initialize Stripe SDK with your publishable key
+        PaymentConfiguration.init(this, "pk_test_51QfwnlFTdqp1BVfOlcBaG0SJftyxo4zULXt6Tb2FrKwvTvgUaTAAdxRhH9qh5mmqXySE3LeDeVg7SeKOCt6TqeqC00sH1k2SD4"); // Replace with your actual publishable key
+
+        // Initialize PaymentSheet
+        paymentSheet = new PaymentSheet(this, this::onPaymentResult);
+
+        // Initialize UI elements
+        paymentAmountText = findViewById(R.id.paymentAmountText);
         paymentButton = findViewById(R.id.paymentButton);
-        paymentStatusMessage = findViewById(R.id.paymentStatusMessage);
 
-        // Initialize Stripe with your publishable key
-        stripe = new Stripe(this, "pk_test_51QfwnlFTdqp1BVfOlcBaG0SJftyxo4zULXt6Tb2FrKwvTvgUaTAAdxRhH9qh5mmqXySE3LeDeVg7SeKOCt6TqeqC00sH1k2SD4");
+        // Retrieve the ride details passed from the previous activity
+        Intent intent = getIntent();
+        fromLocation = intent.getStringExtra("fromLocation");
+        toLocation = intent.getStringExtra("toLocation");
+        price = intent.getStringExtra("price");  // Assuming price is passed as a string
+        time = intent.getStringExtra("time");
+        String dateStr = intent.getStringExtra("date");
 
-        // Set the onClickListener for the payment button
+// Setting  the amount  to be collected by the customer
+        paymentAmountText.setText("Amount: " + price);
+
+
+        formattedDate = formatDate(dateStr);
+
+// Set up the payment button click listener
         paymentButton.setOnClickListener(v -> {
-            // Fetch clientSecret from backend when payment button is clicked
-            fetchClientSecretFromBackend();
+            // Call your backend to create the payment intent
+            createPaymentIntent(price);
         });
     }
 
-    private void fetchClientSecretFromBackend() {
-        executorService.execute(() -> {
-            // Fetch the client secret from backend
-            final String clientSecret = getClientSecretFromBackend();
-
-            // Update UI on the main thread
-            runOnUiThread(() -> {
-                if (clientSecret != null) {
-                    confirmPayment(clientSecret);
-                } else {
-                    Toast.makeText(PaymentPage.this, "Failed to fetch client secret", Toast.LENGTH_SHORT).show();
-                }
-            });
-        });
-    }
-
-    // Method to fetch the client secret from backend
-    public static String getClientSecretFromBackend() {
+    // Method to format the date
+    private String formatDate(String dateStr) {
+        if (dateStr == null || dateStr.isEmpty()) {
+            return "Date not available";
+        }
         try {
-            OkHttpClient client = new OkHttpClient();
-
-            // JSON body with the amount
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("amount", 1000); // Amount in cents (e.g., $10.00 CAD)
-
-            RequestBody body = RequestBody.create(
-
-                    MediaType.parse("application/json; charset=utf-8"),
-                    jsonBody.toString()
-            );
-
-            Request request = new Request.Builder()
-                    .url("http://10.0.2.2:3000/create-payment-intent") // Backend URL
-                    .post(body) // Use POST method
-                    .build();
-
-            // Execute the request and fetch the response
-            Response response = client.newCall(request).execute();
-            if (response.isSuccessful() && response.body() != null) {
-                String responseBody = response.body().string();
-                JSONObject jsonResponse = new JSONObject(responseBody);
-                return jsonResponse.getString("clientSecret"); // Extract clientSecret
-            } else {
-                Log.e("Stripe", "Failed to fetch client secret: " + response.message());
-            }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            Date date = sdf.parse(dateStr);
+            return sdf.format(date);
         } catch (Exception e) {
-            Log.e("Stripe", "Error fetching client secret: " + e.getMessage());
-        }
-        return null; // Return null on failure
-    }
-
-
-    // confirming the payment using fetched client secret
-    private void confirmPayment(String clientSecret) {
-        // Only confirm payment if clientSecret is not null
-        if (clientSecret != null) {
-            stripe.confirmPayment(
-                    this,
-                    ConfirmPaymentIntentParams.create(clientSecret) // Pass the clientSecret to confirm payment
-            );
-        } else {
-            Log.e("Stripe", "Failed to fetch client secret.");
+            return "Date not available";
         }
     }
 
-    // Handling the result of the payment
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        // Pass the result to Stripe to handle success or failure
-        stripe.onPaymentResult(requestCode, data, new ApiResultCallback<PaymentIntentResult>() {
-            @Override
-            public void onSuccess(PaymentIntentResult result) {
-                // Get the PaymentIntent from the result
-                PaymentIntent paymentIntent = result.getIntent();
-                PaymentIntent.Status status = paymentIntent.getStatus();
+    // Method to call your backend and create the payment intent
+    private void createPaymentIntent(String amount) {
+        new Thread(() -> {
+            try {
+                // Make a POST request to your backend to create the Payment Intent
+                OkHttpClient client = new OkHttpClient();
+                String backendUrl = "https://adf4-67-70-134-21.ngrok-free.app/create-payment-intent"; // Your backend URL
 
-                if (status == PaymentIntent.Status.Succeeded) {
-                    // Payment succeeded, log success and show a message to the user
-                    Log.d("Stripe", "Payment succeeded!");
-                    Toast.makeText(PaymentPage.this, "Payment success", Toast.LENGTH_SHORT).show();
-                    paymentStatusMessage.setText("Payment status: " + status);
+                JSONObject json = new JSONObject();
+                double amountInDouble = Double.parseDouble(amount);
+                int amountInCents = (int) (amountInDouble * 100);
+                json.put("amount", amountInCents); // Amount in cents (Stripe expects this)
+                json.put("currency", "usd"); // Currency of the payment
 
-                    // Retrieve the ride details that were passed to PaymentPage
-                    Intent intent = getIntent();
-                    String fromLocation = intent.getStringExtra("fromLocation");
-                    String toLocation = intent.getStringExtra("toLocation");
-                    String price = intent.getStringExtra("price");
-                    String time = intent.getStringExtra("time");
-                    String date = intent.getStringExtra("date");
+                RequestBody body = RequestBody.create(json.toString(), okhttp3.MediaType.get("application/json; charset=utf-8"));
+                Request request = new Request.Builder()
+                        .url(backendUrl)
+                        .post(body)
+                        .addHeader("Content-Type", "application/json")
+                        .build();
 
-                    // Pass these details to the PaymentSuccessPage activity
-                    Intent successIntent = new Intent(PaymentPage.this, PaymentSuccessPage.class);
-                    successIntent.putExtra("fromLocation", fromLocation);
-                    successIntent.putExtra("toLocation", toLocation);
-                    successIntent.putExtra("price", price);
-                    successIntent.putExtra("time", time);
-                    successIntent.putExtra("date", date);
+                Response response = client.newCall(request).execute();
+                if (response.isSuccessful()) {
+                    // Parse the response to get the client secret
+                    String responseData = response.body().string();
+                    JSONObject responseJson = new JSONObject(responseData);
+                    clientSecret = responseJson.getString("clientSecret");
 
-                    // Start the PaymentSuccessPage activity
-                    startActivity(successIntent);
+                    // Present the Payment Sheet on the UI thread
+                    runOnUiThread(this::presentPaymentSheet);
                 } else {
-                    // Handle cases where payment status is not "Succeeded"
-                    Log.e("Stripe", "Payment status: " + status);
+                    showToast("Failed to create Payment Intent");
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showToast("Error creating Payment Intent");
             }
+        }).start();
+    }
 
-            @Override
-            public void onError(Exception e) {
-                // Handle any errors that occur during payment process
-                Log.e("Stripe", "Payment error: " + e.getMessage());
-                Toast.makeText(PaymentPage.this, "Payment failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+    // Method to present the Payment Sheet with the obtained client secret
+    private void presentPaymentSheet() {
+        PaymentSheet.Configuration configuration = new PaymentSheet.Configuration(
+                "Payment Page" // Payment Sheet title
+        );
+
+        paymentSheet.presentWithPaymentIntent(clientSecret, configuration);
+    }
+
+    // Method to handle the result of the payment process
+    private void onPaymentResult(PaymentSheetResult paymentSheetResult) {
+        if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
+            showToast("Payment Successful!");
+
+            // Create the intent to pass to the next page
+            Intent intent = new Intent(PaymentPage.this, PaymentSuccessPage.class);
+
+            // Pass the necessary data to the next activity
+            intent.putExtra("paymentAmount", price);  // You can pass more data as needed
+            intent.putExtra("paymentStatus", "Success");
+            intent.putExtra("fromLocation", fromLocation);
+            intent.putExtra("toLocation", toLocation);
+            if (price == null || price.isEmpty()) {
+                showToast("Price is missing");
             }
-        });
+            intent.putExtra("time", time);
+
+            if (formattedDate == null || formattedDate.isEmpty()) {
+                showToast("Date is missing");
+            }
+            intent.putExtra("formattedDate", formattedDate);
+            intent.putExtra("clientSecret", clientSecret); // If needed, pass the client secret as well
+
+            // Start the next activity
+            startActivity(intent);
+        } else if (paymentSheetResult instanceof PaymentSheetResult.Canceled) {
+            showToast("Payment Canceled.");
+        } else if (paymentSheetResult instanceof PaymentSheetResult.Failed) {
+            String error = ((PaymentSheetResult.Failed) paymentSheetResult).getError().getLocalizedMessage();
+            showToast("Payment Failed: " + error);
+        }
+    }
+
+    // Utility method to show toast messages
+    private void showToast(String message) {
+        runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
     }
 }

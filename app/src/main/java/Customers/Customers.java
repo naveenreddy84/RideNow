@@ -10,6 +10,20 @@ private String email;
      private  String uname;
 
 
+     private String customerid;
+
+    public Customers(String email, String cPassword, String pswd, String uname,String customerid) {
+        this.email = email;
+        this.cPassword = cPassword;
+        this.pswd = pswd;
+        this.uname = uname;
+        this.customerid = customerid;
+
+
+
+    }
+
+
     public String getcPassword() {
         return cPassword;
     }
@@ -41,15 +55,13 @@ private String email;
     public String getUname() {
         return uname;
     }
-
-    public Customers(String email, String cPassword, String pswd, String uname) {
-        this.email = email;
-        this.cPassword = cPassword;
-        this.pswd = pswd;
-        this.uname = uname;
-
-
-
+    public String getcustomerid() {
+        return customerid;
     }
+    public void setcustomerid(String customerid) {
+        this.customerid = customerid;
+    }
+
+
 
 }
